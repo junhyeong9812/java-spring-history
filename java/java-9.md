@@ -15,7 +15,7 @@ Java 9의 중심 주제는 **모듈화**다. 모듈 시스템은 원래 Java 7(2
 
 모듈 시스템(JSR 376)은 진통을 겪었다. 2017년 4~5월의 1차 Public Review 투표가 하위 호환성·벤더 종속 우려 등으로 부결되었고, 수정된 명세가 6월 재투표를 통과한 뒤, 8월 29일~9월 11일 최종 승인 투표를 거쳐 9월 21일 출시되었다.
 
-또한 Java 9는 **릴리스 모델 전환의 분수령**이다. 출시 직후인 2017년 9월, Oracle은 거대 릴리스를 수년에 한 번 내던 방식을 버리고 **6개월마다 정기 피처 릴리스**를 내며 3년마다 LTS를 지정하는 새 모델로의 전환을 발표했다. 이에 따라 Java 9는 옛 모델의 마지막 메이저 릴리스가 되었고, 6개월 뒤 Java 10(2018년 3월)이 새 모델의 첫 릴리스로 나왔다.
+또한 Java 9는 **릴리스 모델 전환의 분수령**이다. GA(9월 21일)를 앞둔 2017년 9월 6일, Oracle(Mark Reinhold)은 거대 릴리스를 수년에 한 번 내던 방식을 버리고 **6개월마다 정기 피처 릴리스**를 내며 3년마다 LTS를 지정하는 새 모델로의 전환을 발표했다. 이에 따라 Java 9는 옛 모델의 마지막 메이저 릴리스가 되었고, 6개월 뒤 Java 10(2018년 3월)이 새 모델의 첫 릴리스로 나왔다.
 
 ## 주요 추가 기능
 
@@ -111,7 +111,7 @@ interface Logger {
 
 ### HTTP/2 클라이언트 (인큐베이터, JEP 110)
 - `HttpURLConnection`의 낡은 한계를 대체하는 새 HTTP 클라이언트. HTTP/2와 WebSocket을 지원하며 동기/비동기 요청을 제공한다.
-- Java 9에서는 **인큐베이터 모듈**(`jdk.incubator.http`, 패키지 `jdk.incubator.http`)로 시범 도입되었고, 이후 Java 11(JEP 321)에서 `java.net.http`로 정식 표준화되었다.
+- Java 9에서는 **인큐베이터 모듈**(모듈명 `jdk.incubator.httpclient`, 패키지 `jdk.incubator.http`)로 시범 도입되었고, 이후 Java 11(JEP 321)에서 `java.net.http`로 정식 표준화되었다.
 
 ```java
 // Java 9 인큐베이터 API (이후 java.net.http로 표준화됨)
@@ -141,7 +141,7 @@ ProcessHandle.allProcesses()
 - 32비트/64비트 서버 구성에서 **G1(Garbage-First) GC를 기본 GC로** 채택. 기존 기본값이던 Parallel GC를 대체하여, 큰 힙에서도 예측 가능한 짧은 정지 시간(low-pause)을 우선하는 방향으로 전환했다.
 
 ### Stream / Optional API 개선
-- **Stream**: `takeWhile`, `dropWhile`(조건 기반 자르기), 단일 인자 `iterate`(종료 조건 포함), `ofNullable`(null이면 빈 스트림) 추가.
+- **Stream**: `takeWhile`, `dropWhile`(조건 기반 자르기), 3인자 `iterate(seed, hasNext, next)`(종료 조건을 받는 오버로드), `ofNullable`(null이면 빈 스트림) 추가.
 - **Optional**: `ifPresentOrElse`(값 유무에 따라 분기), `or`(빈 경우 대체 Optional), `stream`(Optional → Stream 변환) 추가.
 
 ```java
