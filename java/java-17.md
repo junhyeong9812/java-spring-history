@@ -34,6 +34,28 @@ public record Rectangle(double w, double h)      implements Shape { }
 - `sealed` — 다시 제한된 확장 허용
 - `non-sealed` — 봉인을 풀어 자유 확장 허용
 
+아래 클래스 다이어그램은 봉인 계층을 표현한다. `Shape`는 `permits`로 허용한 하위 타입(`Circle`·`Square`·`Triangle`)만 구현할 수 있어, 타입 집합이 닫혀 있음을 컴파일러가 보장한다.
+
+```mermaid
+classDiagram
+    class Shape {
+        <<sealed interface>>
+    }
+    class Circle {
+        +double radius
+    }
+    class Square {
+        +double side
+    }
+    class Triangle {
+        +double base
+        +double height
+    }
+    Shape <|.. Circle : permits
+    Shape <|.. Square : permits
+    Shape <|.. Triangle : permits
+```
+
 ### switch 패턴 매칭 (JEP 406, preview)
 
 switch에서 **타입 패턴**으로 분기할 수 있게 하는 기능이 preview로 등장했다. sealed 타입과 결합하면, 컴파일러가 모든 경우를 다뤘는지(exhaustiveness) 검사해줘 안전한 분기를 작성할 수 있다. (정식화는 Java 21의 JEP 441에서 이뤄진다.)
@@ -61,6 +83,19 @@ static String describe(Object obj) {
         default                  -> "기타";
     };
 }
+```
+
+아래 흐름도는 switch 패턴 매칭이 입력 객체의 런타임 타입에 따라 분기하는 과정을 보여준다. `Shape`가 sealed이면 컴파일러가 모든 하위 타입 처리 여부(exhaustiveness)를 검사한다. 참고로 Java 17 시점(JEP 406)은 preview이며, 가드 조건 문법은 `when`이 아니라 `&&`다(`when` 가드는 Java 19+에서 도입).
+
+```mermaid
+flowchart TD
+    A["입력 객체 (Shape)"] --> B{"타입 패턴 매칭"}
+    B -->|"case Circle c"| C["원 넓이: PI * r^2"]
+    B -->|"case Square s"| D["정사각형 넓이: side^2"]
+    B -->|"case Triangle t"| E["삼각형 넓이: base * height / 2"]
+    C --> F["결과 반환"]
+    D --> F
+    E --> F
 ```
 
 ### 새 의사난수 생성기 API (JEP 356, 정식)
