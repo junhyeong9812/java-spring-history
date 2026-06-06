@@ -57,11 +57,12 @@ if (obj instanceof int i) {           // 원시 타입 패턴
     System.out.println(i + 1);
 }
 
-switch (x) {                          // 원시 타입에 대한 패턴 switch
+int x = 42;
+String r = switch (x) {                // 원시 타입에 대한 패턴 switch (switch 식)
     case 0 -> "zero";
     case int i when i > 0 -> "양수";
     default -> "음수";
-}
+};
 ```
 
 ### Module Import Declarations (JEP 476, 프리뷰)
@@ -85,10 +86,13 @@ void main() {
 class Range {
     final int lo, hi;
     Range(int lo, int hi) {
-        if (lo > hi)                              // this(...) 호출 전 검증
-            throw new IllegalArgumentException();
         this.lo = lo;
         this.hi = hi;
+    }
+    Range(int[] bounds) {
+        if (bounds.length != 2)                   // 명시적 this(...) 호출 전에 검증 문장 배치
+            throw new IllegalArgumentException();
+        this(bounds[0], bounds[1]);               // 검증 뒤에 오는 명시적 생성자 호출
     }
 }
 ```
