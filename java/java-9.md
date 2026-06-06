@@ -45,6 +45,25 @@ javac -d out --module-source-path src $(find src -name "*.java")
 java --module-path out --module com.example.app/com.example.app.Main
 ```
 
+`requires`(의존)와 `exports`(공개 패키지) 선언으로 모듈 간 의존성 그래프가 형성된다. 아래는 예시 앱 모듈의 의존 구조다.
+
+```mermaid
+flowchart TD
+    APP["com.app<br/>exports: com.app.web"]
+    SVC["com.service<br/>exports: com.service.api"]
+    BASE["java.base<br/>(모든 모듈 암묵 의존)"]
+    SQL["java.sql<br/>exports: java.sql"]
+
+    APP -- requires --> SVC
+    APP -- requires --> SQL
+    SVC -- requires --> SQL
+    APP -- requires --> BASE
+    SVC -- requires --> BASE
+    SQL -- requires --> BASE
+```
+
+`com.app`은 `com.service`와 `java.sql`을 명시적으로 `requires`하고, 각 모듈은 `exports`한 패키지만 외부에 노출한다. `java.base`는 모든 모듈이 자동으로 의존하는 기반 모듈이다.
+
 ### jlink — 모듈 기반 커스텀 런타임 이미지 (JEP 282)
 - 애플리케이션이 실제로 쓰는 모듈만 골라 최소 크기의 전용 JRE 이미지를 만드는 링커 도구. 모듈 시스템이 있어서 가능해진 기능으로, 컨테이너·임베디드 배포에 유용하다.
 
