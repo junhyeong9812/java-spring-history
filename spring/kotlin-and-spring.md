@@ -113,6 +113,17 @@ class UserController(private val repo: UserRepository) {
 
 코루틴 기반 Spring Data 리포지토리(`CoroutineCrudRepository`)도 제공된다.
 
+코루틴 구성요소와 Reactor 타입이 양방향으로 대응되는 브리지는 다음과 같다(Spring 5.2+).
+
+```mermaid
+flowchart LR
+    A["suspend fun"] <--> B["Mono&lt;T&gt;"]
+    C["Flow&lt;T&gt;"] <--> D["Flux&lt;T&gt;"]
+    E["CoroutineCrudRepository<br/>(suspend / Flow API)"] -->|"리액티브 인프라 위에서 동작"| F["Reactive 리포지토리 인프라<br/>(Mono / Flux 기반)"]
+```
+
+`suspend ↔ Mono`, `Flow ↔ Flux`는 양방향으로 변환되는 타입 브리지다(`awaitSingle()`, `asFlow()`, `asFlux()` 등). 반면 `CoroutineCrudRepository`는 `ReactiveCrudRepository`와 서로 변환되는 관계가 아니라, **코루틴 API를 노출하는 별도 추상화**로서 리액티브 인프라 위에서 동작한다. 덕분에 명령형처럼 읽히는 코드로 리액티브 성능을 얻는다.
+
 ## 자바와 코틀린의 공존
 
 ### 같은 프로젝트에서 혼용 (상호운용성)
@@ -163,6 +174,20 @@ open class MyService { open fun work() { } }
 @Service
 class MyService { fun work() { } }
 ```
+
+코틀린의 final 기본 문제를 컴파일러 플러그인이 어떻게 해결하는지 레이어로 보면 다음과 같다.
+
+```mermaid
+flowchart TD
+    A["Kotlin 소스"] --> B["kotlin-spring (all-open)<br/>@Component류 → open 처리"]
+    A --> C["kotlin-jpa (no-arg)<br/>@Entity 기본 생성자 합성"]
+    B --> D["바이트코드"]
+    C --> D
+    D --> E["Spring: CGLIB 프록시 생성"]
+    D --> F["Hibernate: 엔티티 인스턴스화"]
+```
+
+컴파일 단계에서 플러그인이 final/생성자 제약을 풀어주어, Spring과 Hibernate가 런타임에 프록시·인스턴스화를 정상 수행한다.
 
 마찬가지로 JPA 엔티티는 `kotlin-jpa`(no-arg)가 없으면 기본 생성자가 없어 Hibernate가 인스턴스를 만들지 못한다. 다만 `kotlin-jpa`는 인자 없는 생성자만 합성할 뿐 클래스를 `open`으로 만들지는 않는다. 게다가 `@Entity`는 Spring 스테레오타입이 아니어서 `kotlin-spring`(all-open)의 기본 대상에도 포함되지 않는다. 따라서 Hibernate의 지연 로딩(프록시 서브클래싱) 등을 위해 엔티티를 non-final로 두려면, `allOpen` 설정에 JPA 애너테이션(`jakarta.persistence.Entity`/`MappedSuperclass`/`Embeddable`)을 직접 지정하거나 클래스에 `open`을 붙여야 한다.
 
