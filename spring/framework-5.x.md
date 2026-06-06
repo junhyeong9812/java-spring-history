@@ -41,6 +41,32 @@ public Flux<Account> stream() {
 }
 ```
 
+아래 두 다이어그램은 MVC(블로킹)와 WebFlux(논블로킹)의 요청 처리 방식 차이를 보여준다. MVC는 요청 하나가 스레드 하나를 결과가 나올 때까지 점유하고, WebFlux는 적은 수의 이벤트 루프 스레드가 Reactor 파이프라인으로 여러 요청을 논블로킹 처리한다.
+
+```mermaid
+flowchart TD
+    subgraph MVC["Spring MVC (블로킹)"]
+        direction TD
+        M1["요청 N개"] --> M2["서블릿 컨테이너 (Tomcat)"]
+        M2 --> M3["스레드풀: 요청당 스레드 1개 점유"]
+        M3 --> M4["@Controller 메서드 실행"]
+        M4 --> M5["DB/IO 호출 동안 스레드 블록 (대기)"]
+        M5 --> M6["결과 반환 후 스레드 반납"]
+    end
+```
+
+```mermaid
+flowchart TD
+    subgraph FLUX["Spring WebFlux (논블로킹)"]
+        direction TD
+        F1["요청 N개"] --> F2["Netty/Undertow 이벤트 루프 (소수 스레드)"]
+        F2 --> F3["핸들러가 Mono/Flux 파이프라인 구성"]
+        F3 --> F4["논블로킹 IO 등록 후 스레드 즉시 반환"]
+        F4 --> F5["데이터 준비되면 콜백/구독으로 재개"]
+        F5 --> F6["Reactor가 결과 방출 → 응답 스트리밍"]
+    end
+```
+
 ### 함수형 웹 엔드포인트 (RouterFunction)
 어노테이션 대신 함수(라우터 + 핸들러)로 라우팅을 구성하는 새 모델.
 
@@ -117,6 +143,22 @@ suspend fun get(@PathVariable id: Long): Account =
 @GetMapping("/stream")
 fun stream(): Flow<Account> =        // Kotlin Flow (5.2+)
     accountService.findAll()
+```
+
+5.2부터 Spring은 코루틴과 Reactor 사이를 양방향으로 자동 변환한다. `suspend` 함수는 단일 비동기 결과인 `Mono`로, `Flow`는 0..N 스트림인 `Flux`로 대응되어 "리액티브를 명령형처럼" 작성할 수 있다.
+
+```mermaid
+flowchart LR
+    subgraph KT["Kotlin 코루틴"]
+        S["suspend fun (단일 결과)"]
+        FL["Flow&lt;T&gt; (0..N 스트림)"]
+    end
+    subgraph RX["Reactor"]
+        MO["Mono&lt;T&gt; (0..1)"]
+        FX["Flux&lt;T&gt; (0..N)"]
+    end
+    S <-->|"awaitSingle / Mono.asFlow"| MO
+    FL <-->|"asFlux / Flux.asFlow"| FX
 ```
 
 ---
