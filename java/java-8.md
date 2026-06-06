@@ -70,6 +70,19 @@ Predicate<String> isEmpty = String::isEmpty;
 Function<String, Integer> length = String::length;
 ```
 
+하나의 람다는 추상 메서드가 하나뿐인 함수형 인터페이스(SAM)의 인스턴스로 변환된다. 아래는 대표 인터페이스와 람다 형태의 매핑이다.
+
+```mermaid
+flowchart LR
+    L1["() -> T"] --> S["Supplier&lt;T&gt;<br/>T get()"]
+    L2["(T) -> void"] --> C["Consumer&lt;T&gt;<br/>void accept(T)"]
+    L3["(T) -> boolean"] --> P["Predicate&lt;T&gt;<br/>boolean test(T)"]
+    L4["(T) -> R"] --> F["Function&lt;T,R&gt;<br/>R apply(T)"]
+    L5["(T,U) -> R"] --> BF["BiFunction&lt;T,U,R&gt;<br/>R apply(T,U)"]
+```
+
+람다의 파라미터·반환 형태가 타깃 함수형 인터페이스의 단일 추상 메서드 시그니처와 일치할 때, 그 인터페이스 타입으로 추론된다.
+
 ### 메서드 참조 (Method References)
 - 이미 존재하는 메서드를 람다 대신 가리키는 축약 문법. `::` 연산자 사용.
 - 4가지 형태: 정적 메서드(`ClassName::staticMethod`), 특정 객체의 인스턴스 메서드(`instance::method`), 임의 객체의 인스턴스 메서드(`ClassName::instanceMethod`), 생성자(`ClassName::new`).
@@ -119,6 +132,19 @@ int totalLength = names.stream().mapToInt(String::length).sum();
 // 병렬 처리
 long count = names.parallelStream().filter(n -> n.length() > 3).count();
 ```
+
+Stream은 소스 → 중간 연산 → 최종 연산으로 이어지는 파이프라인이며, 중간 연산은 **지연(lazy)** 평가된다.
+
+```mermaid
+flowchart LR
+    A["소스<br/>Collection.stream()"] --> B["중간 연산<br/>filter (lazy)"]
+    B --> C["중간 연산<br/>map (lazy)"]
+    C --> D["중간 연산<br/>sorted (lazy)"]
+    D --> E["최종 연산<br/>collect / forEach (eager)"]
+    E -.실행 트리거.-> B
+```
+
+`collect`·`forEach` 같은 최종 연산이 호출되기 전까지는 중간 연산이 실제로 실행되지 않는다(지연 평가). 최종 연산이 파이프라인 전체를 한 번에 흐르게 한다.
 
 ### 인터페이스의 default 메서드와 static 메서드 (JSR 335)
 - 인터페이스에 구현(body)을 가진 `default` 메서드와 `static` 메서드를 추가할 수 있게 됨.
