@@ -30,7 +30,7 @@
 | 2019-09 | **Spring Framework 5.2 — 코루틴(suspend 함수) 정식 지원** (WebFlux 코루틴, `Flow` ↔ `Flux` 연동) |
 | 2022~ | Spring Framework 6 / Spring Boot 3 — Java 17·Jakarta 기반에서 Kotlin 지원 지속 (코루틴/DSL 강화) |
 
-> 주의: start.spring.io의 Kotlin 옵션은 Spring Framework 5.0 발표보다 **앞서(2016년경)** 등장했다. 즉 "프로젝트 생성기에서 먼저 실험 → 프레임워크 본체(5.0)에서 1급 지원 → Spring Boot 2.0에서 완성"의 순서로 정착했다.
+> 주의: start.spring.io의 Kotlin 옵션은 Spring Framework 5.0 발표보다 **앞서(2016년경)** 등장했다. 즉 "프로젝트 생성기에서 먼저 실험 → 프레임워크 본체(5.0)에서 1급 지원 → Spring Boot 2.0에서 스타터·플러그인까지 정식 지원"의 순서로 정착했다. 다만 코루틴(`suspend`) 1급 지원은 그 다음 단계인 Spring Framework 5.2(2019)에서 별도로 추가된 것이므로, "Boot 2.0에서 코틀린 지원이 모두 끝났다"는 의미는 아니다.
 
 ## Spring이 제공하는 Kotlin 지원 기능
 
