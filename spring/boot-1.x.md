@@ -48,6 +48,20 @@ public class DemoApplication {
 
 자동 설정은 사용자가 직접 정의한 빈이 있으면 물러난다(`@ConditionalOnMissingBean`). 즉, 기본값을 주되 강제하지 않는다.
 
+아래는 "classpath에 있으면 알아서 설정"되는 자동 설정의 동작 흐름이다.
+
+```mermaid
+flowchart TD
+    A["@SpringBootApplication"] --> B["@EnableAutoConfiguration"]
+    B --> C["spring.factories 로드<br/>(자동 설정 후보 목록)"]
+    C --> D["@Conditional 조건 평가"]
+    D --> E{"classpath에 클래스 존재?<br/>이미 등록된 빈 없음?"}
+    E -- "조건 충족" --> F["빈 자동 등록<br/>(예: DataSource)"]
+    E -- "조건 불충족" --> G["해당 자동 설정 건너뜀"]
+```
+
+각 자동 설정 후보는 클래스패스와 기존 빈 상태를 조건으로 평가받고, 충족될 때만 빈을 등록한다.
+
 ### 스타터 POM (Starter Dependencies)
 서로 호환되는 의존성 묶음을 하나의 좌표로 제공한다. 버전 충돌 지옥에서 해방시킨 핵심 장치다.
 
@@ -67,6 +81,18 @@ public class DemoApplication {
 ```
 
 `spring-boot-starter-web` 하나면 Spring MVC, Jackson, 내장 Tomcat, 검증(validation)이 호환 버전으로 한꺼번에 들어온다.
+
+스타터 하나가 끌어오는 전이 의존성 묶음을 그림으로 보면 다음과 같다.
+
+```mermaid
+flowchart LR
+    S["spring-boot-starter-web"] --> A["spring-webmvc"]
+    S --> B["jackson<br/>(JSON 직렬화)"]
+    S --> C["내장 Tomcat<br/>(spring-boot-starter-tomcat)"]
+    S --> D["validation<br/>(Bean Validation)"]
+```
+
+좌표 하나만 선언하면 호환 버전으로 검증된 라이브러리 묶음이 전이 의존성으로 따라온다.
 
 ### 내장 서블릿 컨테이너 (Embedded Tomcat/Jetty/Undertow)
 별도 WAS 설치/배포 없이 컨테이너를 애플리케이션에 내장한다. 결과물은 모든 의존성을 담은 실행 가능한 "fat jar"다.
