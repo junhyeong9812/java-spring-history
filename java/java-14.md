@@ -56,7 +56,7 @@ if (obj instanceof String s) {
 
 ### 유용한 NullPointerException (JEP 358, 정식)
 
-NPE 발생 시 **정확히 어떤 변수/표현식이 null이었는지**를 메시지에 담아 알려준다. 디버깅 시간을 크게 줄여준다.
+NPE 발생 시 **정확히 어떤 변수/표현식이 null이었는지**를 메시지에 담아 알려준다. 디버깅 시간을 크게 줄여준다. 다만 14에서는 이 상세 메시지가 **기본 비활성화**라 `-XX:+ShowCodeDetailsInExceptionMessages` 옵션을 켜야 하며, 기본 활성화는 JDK 15부터다.
 
 ```text
 Cannot invoke "String.toLowerCase()" because "<local1>.name" is null
