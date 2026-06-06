@@ -48,6 +48,18 @@ void printAll(List<? extends Number> nums) {
 }
 ```
 
+제네릭은 **컴파일 시점에만** 타입을 검사하고, 바이트코드에서는 타입 인자를 지운다(type erasure). 아래는 그 흐름이다.
+
+```mermaid
+flowchart LR
+    A["소스: List&lt;String&gt;"] --> B["컴파일러: 타입 검사<br/>(컴파일 시점)"]
+    B --> C["타입 소거: raw List 로 변환"]
+    C --> D["바이트코드: List + 자동 캐스트 삽입"]
+    D --> E["런타임: 타입 인자 정보 없음"]
+```
+
+런타임에는 `List<String>`과 `List<Integer>`가 동일한 raw `List`로 보이며, 타입 안정성은 컴파일러가 삽입한 캐스트로만 보장된다.
+
 ### 어노테이션 / 메타데이터 (Annotations, JSR 175)
 클래스, 메서드, 필드 등 언어 구성요소에 메타데이터를 부착할 수 있게 되었다. 프레임워크 설정이 XML에서 코드 내 어노테이션으로 이동하는 흐름의 출발점이다.
 
