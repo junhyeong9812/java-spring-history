@@ -38,7 +38,7 @@ Java 25 LTS 직전의 마지막 비-LTS 릴리스로, JEP 24개라는 역대급 
 ## 주요 추가 기능
 
 ### Class-File API (JEP 484, 정식)
-- 클래스 파일을 파싱·생성·변환하는 표준 API가 정식화되었다(22 프리뷰 → 23 2차 프리뷰 → 24 정식). 프레임워크가 의존하던 ASM 등 외부 바이트코드 라이브러리를 표준으로 대체한다.
+- 클래스 파일을 파싱·생성·변환하는 표준 API가 정식화되었다(22 프리뷰 → 23 2차 프리뷰 → 24 정식). JDK가 내부적으로 두고 있던 ASM 사본을 이 표준 API로 대체할 수 있게 하는 것이 목표이며, 외부 ASM 등 서드파티 바이트코드 라이브러리를 폐기 대상으로 삼는 것은 목표가 아니다.
 
 ```java
 import java.lang.classfile.*;
@@ -62,13 +62,18 @@ List<List<Integer>> windows = Stream.of(1, 2, 3, 4, 5)
 - NIST가 표준화한 격자 기반 포스트양자 암호 알고리즘을 JDK 표준 API로 제공한다. **ML-KEM**(FIPS 203, 키 캡슐화)과 **ML-DSA**(FIPS 204, 디지털 서명)이며, 양자컴퓨터 등장 시에도 안전한 키 교환·서명을 가능케 한다.
 
 ```java
-// ML-KEM 키 쌍 생성
-KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM");
-KeyPair kp = kpg.generateKeyPair();
+// ML-KEM 키 쌍 생성 (키 캡슐화용)
+KeyPairGenerator kemKpg = KeyPairGenerator.getInstance("ML-KEM");
+KeyPair kemKp = kemKpg.generateKeyPair();
 
-// ML-DSA 서명
+// ML-DSA 키 쌍 생성 후 디지털 서명
+KeyPairGenerator dsaKpg = KeyPairGenerator.getInstance("ML-DSA");
+KeyPair dsaKp = dsaKpg.generateKeyPair();
+
 Signature sig = Signature.getInstance("ML-DSA");
-sig.initSign(privateKey);
+sig.initSign(dsaKp.getPrivate());
+sig.update("hello".getBytes());
+byte[] signature = sig.sign();
 ```
 
 ### Ahead-of-Time Class Loading & Linking (JEP 483, 정식)
@@ -95,7 +100,7 @@ java -XX:AOTCache=app.aot -cp app.jar App
 - **Key Derivation Function API (JEP 478, 프리뷰)**: HKDF 등 키 유도 함수 표준 API의 첫 프리뷰. (Java 25에서 정식화됨.)
 - **Generational Shenandoah (JEP 404, 실험적)** / **Compact Object Headers (JEP 450, 실험적)**: GC·메모리 풋프린트 개선을 실험 단계로 도입.
 - **Late Barrier Expansion for G1 (JEP 475)**: G1 GC의 배리어 코드를 컴파일 후반에 확장해 C2 컴파일 비용을 줄인다.
-- **Linking Run-Time Images without JMODs (JEP 493, 정식)**: JMOD 파일 없이 `jlink`로 런타임 이미지를 생성, JDK 설치 크기를 줄인다.
+- **Linking Run-Time Images without JMODs (JEP 493, 정식)**: JMOD 파일 없이 `jlink`로 런타임 이미지를 생성할 수 있게 한다. 단 이는 `--enable-linkable-runtime`으로 빌드한 JDK에서만 가능하며, 기본 빌드는 여전히 JMOD를 포함한다. 이를 통해 JDK 설치 크기를 줄일 수 있다.
 - **Remove the Windows 32-bit x86 Port (JEP 479)** / **Deprecate the 32-bit x86 Port for Removal (JEP 501)**: 32비트 x86 지원을 단계적으로 종료(윈도우는 제거, 리눅스는 폐기 예고). Java 25에서 완전 제거된다.
 - **Warn upon Use of sun.misc.Unsafe Memory-Access Methods (JEP 498)**: 23에서 폐기 예고한 메서드 사용 시 런타임 경고 발생.
 - **계속 진행 중인 프리뷰**: Scoped Values(JEP 487, 4차), Structured Concurrency(JEP 499, 4차), Flexible Constructor Bodies(JEP 492, 3차), Module Import Declarations(JEP 494, 2차), Primitive Types in Patterns(JEP 488, 2차), Simple Source Files and Instance Main Methods(JEP 495, 4차), Vector API(JEP 489, 9차 인큐베이터).
