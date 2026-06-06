@@ -42,6 +42,19 @@ ScopedValue.where(CURRENT_USER, user).run(() -> {
 });
 ```
 
+아래 흐름도는 Scoped Value의 전파를 보여준다. `where(...).run(...)`으로 바인딩한 불변 값이 동적 범위 안의 호출 트리 하위로 자동 전파되어, `ThreadLocal`처럼 명시적으로 인자를 넘기지 않고도 하위 메서드에서 `get()`으로 읽을 수 있다. (Java 25에서 Scoped Values는 정식 기능이다.)
+
+```mermaid
+flowchart LR
+    A["ScopedValue.where(USER, user)"] --> B["run(() -> handleRequest())"]
+    B --> C["handleRequest()"]
+    C --> D["service()"]
+    D --> E["repository()"]
+    C -.->|"USER.get()"| U["불변 값 user"]
+    D -.->|"USER.get()"| U
+    E -.->|"USER.get()"| U
+```
+
 ### Module Import Declarations (JEP 511, 정식)
 - 모듈이 export하는 모든 패키지를 한 줄로 임포트한다. 23 프리뷰 → 24 2차 프리뷰 → 25 정식.
 
@@ -108,6 +121,20 @@ java -XX:+UseCompactObjectHeaders -jar app.jar
 - **Stable Values (JEP 502, 프리뷰)**: `final`의 불변성과 지연 초기화의 유연성을 결합한 "안정값" API의 첫 프리뷰. 한 번만 설정되며 JIT가 상수처럼 최적화할 수 있다.
 - **PEM Encodings of Cryptographic Objects (JEP 470, 프리뷰)**: 키·인증서 등 암호 객체를 PEM 텍스트로 인코딩/디코딩하는 표준 API의 첫 프리뷰.
 - **Structured Concurrency (JEP 505, 5차 프리뷰)**: 아직 정식화되지 않고 API를 다듬는 5차 프리뷰로 유지된다.
+
+아래 흐름도는 구조적 동시성의 작업 트리를 보여준다. `StructuredTaskScope`(부모)가 여러 subtask를 `fork`하고 `join`으로 모두 기다린 뒤 결과를 취합한다. 부모 스코프가 닫히면 자식 작업도 함께 정리되어, 부모-자식 생명주기가 하나로 묶인다. (Java 25 시점에 구조적 동시성은 프리뷰, Scoped Values는 정식이다.)
+
+```mermaid
+flowchart TD
+    P["StructuredTaskScope (부모)"] -->|"fork"| T1["subtask: findUser()"]
+    P -->|"fork"| T2["subtask: fetchOrder()"]
+    P -->|"fork"| T3["subtask: fetchPrefs()"]
+    T1 -->|"완료"| J["join() — 모든 자식 대기"]
+    T2 -->|"완료"| J
+    T3 -->|"완료"| J
+    J --> R["결과 취합 / 실패 시 전체 취소"]
+    R --> C["scope.close() — 자식 생명주기 종료"]
+```
 - **Primitive Types in Patterns, instanceof, and switch (JEP 507, 3차 프리뷰)**: 원시 타입 패턴 매칭은 LTS에서도 여전히 프리뷰(3차)다.
 - **Vector API (JEP 508, 10차 인큐베이터)**: Valhalla 의존성으로 인해 LTS에서도 여전히 인큐베이터(10차)에 머문다.
 - **Remove the 32-bit x86 Port (JEP 503, 정식)**: 32비트 x86 포트와 관련 빌드를 완전히 제거.
