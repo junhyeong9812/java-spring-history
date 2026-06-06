@@ -22,7 +22,7 @@ Spring은 두 축으로 진화했다.
 | 2006~07 | **2.0**(10월) / 2.5(07.11) | — | XML 네임스페이스, 어노테이션(`@Autowired`/`@Component`) 도입 |
 | 2009~12 | **3.0**(12월) / 3.1 / 3.2 | — | Java 5 baseline, **Java Config**, SpEL, REST, `@Profile` |
 | 2013~16 | **4.0**(13.12) / 4.3 | **1.0**(14.04) | Java 8 지원, `@RestController` / Boot 등장(자동 설정·스타터) |
-| 2017~20 | **5.0**(17.09) / 5.2 / 5.3 | **2.0**(18.03) | **리액티브(WebFlux) + Kotlin 1급 지원** / Boot 2.0 Kotlin 완성 |
+| 2017~20 | **5.0**(17.09) / 5.2 / 5.3 | **2.0**(18.03) | **리액티브(WebFlux) + Kotlin 1급 지원** / Boot 2.0 Kotlin 정식 지원, 5.2 코루틴 |
 | 2022~ | **6.0**(22.11) / 6.1 / 6.2 | **3.0**(22.11) / 3.1~3.4 | **Java 17 + Jakarta EE 9(javax→jakarta)**, GraalVM 네이티브/AOT, 가상 스레드 |
 
 ---
@@ -78,7 +78,7 @@ config.xml             @Autowired             @Bean                  beans { } /
 | 2016 (경) | start.spring.io(프로젝트 생성기)에 Kotlin 옵션 실험적 추가 |
 | 2017-05 | Google, 안드로이드 1급 언어로 Kotlin 채택 |
 | **2017-09** | **Spring Framework 5.0 — Kotlin 1급 지원 정식 포함** (널 안정성, 확장 함수, `beans`/`router` DSL) |
-| **2018-03** | **Spring Boot 2.0 — Kotlin 지원 완성** (컴파일러 플러그인·스타터, start.spring.io 정식 옵션) |
+| **2018-03** | **Spring Boot 2.0 — Kotlin 정식 지원** (컴파일러 플러그인·스타터, start.spring.io 정식 옵션) |
 | **2019-09** | **Spring Framework 5.2 — 코루틴(`suspend`/`Flow`) 정식 지원** |
 
 자세한 내용과 코드 예시(자바 vs 코틀린 비교)는 [kotlin-and-spring.md](kotlin-and-spring.md) 참조.
