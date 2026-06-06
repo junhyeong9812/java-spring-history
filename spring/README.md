@@ -12,6 +12,39 @@ Spring은 두 축으로 진화했다.
 
 여기에 사용자가 특별히 요청한 **Kotlin과 Spring의 통합사**를 별도 문서로 정리했다.
 
+### Spring 모듈 의존성 그래프
+
+아래는 Spring Framework 핵심 모듈의 의존 방향이다. 화살표는 "왼쪽이 오른쪽에 의존한다"는 뜻으로, 모든 길은 결국 `spring-core`로 수렴한다.
+
+```mermaid
+flowchart TD
+    core["spring-core"]
+    beans["spring-beans"]
+    context["spring-context"]
+    aop["spring-aop"]
+    expr["spring-expression"]
+    web["spring-web"]
+    webmvc["spring-webmvc"]
+    webflux["spring-webflux"]
+    tx["spring-tx"]
+    jdbc["spring-jdbc"]
+    orm["spring-orm"]
+
+    beans --> core
+    context --> beans
+    context --> aop
+    context --> expr
+    aop --> core
+    expr --> core
+    web --> context
+    webmvc --> web
+    webflux --> web
+    tx --> beans
+    jdbc --> tx
+    orm --> tx
+    orm --> jdbc
+```
+
 ---
 
 ## 전체 타임라인
@@ -27,6 +60,22 @@ Spring은 두 축으로 진화했다.
 | 2025~ | **7.0**(25.11.13 GA) | **4.0**(25.11.20 GA) | **현재 최신 세대** — Java 17 baseline(Java 25 수용), Jakarta EE 11, JSpecify 널 안정성, API 버저닝, Boot 코드베이스 모듈화 |
 
 > 본 문서의 상세 설명은 Framework 6.x / Boot 3.x까지 다룬다. 7.0/4.0은 위 타임라인에 최신 동향으로만 표기하며 별도 상세 문서는 두지 않는다.
+
+아래 타임라인은 Framework 대버전·Boot 대버전과 자바 baseline의 대응 관계를 한눈에 보여준다.
+
+```mermaid
+timeline
+    title Spring Framework / Boot 버전 · 자바 매핑
+    2004 : Framework 1.0 (Java 1.3)
+    2006 : Framework 2.0 (Java 1.3+)
+    2009 : Framework 3.0 (Java 5)
+    2013 : Framework 4.0 (Java 6/8)
+    2014 : Boot 1.0 (Framework 4.x)
+    2017 : Framework 5.0 (Java 8)
+    2018 : Boot 2.0 (Framework 5.x)
+    2022 : Framework 6.0 / Boot 3.0 (Java 17)
+    2025 : Framework 7.0 / Boot 4.0 (Java 17, Java 25 수용)
+```
 
 ---
 
@@ -61,6 +110,19 @@ XML BeanFactory     어노테이션         Java Config        Boot 자동설정
 (2004, 1.x)    →    (2007, 2.5)   →    (2009, 3.0)   →    (2014, Boot)         →    (2017, Framework 5.0)
 <bean .../>         @Component         @Configuration     @SpringBootApplication    beans { } / router { }
 config.xml          @Autowired         @Bean             (auto-configuration)
+```
+
+아래 흐름도는 설정 스타일이 XML에서 함수형/Kotlin DSL까지 어떻게 진화했는지를 좌→우로 보여준다.
+
+```mermaid
+flowchart LR
+    xml["XML 설정<br/>(2004, 1.x)"]
+    anno["어노테이션<br/>(2007, 2.5)"]
+    javacfg["JavaConfig<br/>(2009, 3.0)"]
+    boot["Boot 자동설정<br/>(2014, Boot 1.0)"]
+    dsl["함수형/Kotlin DSL<br/>(2017, Framework 5.0)"]
+
+    xml --> anno --> javacfg --> boot --> dsl
 ```
 
 자바 진영의 흐름:
