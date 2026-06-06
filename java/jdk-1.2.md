@@ -6,7 +6,7 @@
 - 정식 출시일: 1998년 12월 8일
 - 개발 주체: Sun Microsystems
 - 공식 명칭: J2SE 1.2 (Java 2 Platform, Standard Edition) — 버전 번호는 1.2지만 "Java 2"로 마케팅됨
-- 코드네임: Playground
+- 코드네임: Playground (일부 출처에서만 쓰이는 비공식 명칭. Sun의 공식 코드네임 관행은 1.3 Kestrel부터 본격화됨)
 
 ## 시대적 배경
 JDK 1.1까지 자바는 빠르게 성장했지만, GUI(AWT)는 여전히 무겁고 플랫폼 의존적이었으며, 자료구조 API는 `Vector`/`Hashtable` 수준으로 일관성이 떨어졌다. 동시에 자바의 적용 범위가 데스크톱·서버·임베디드로 넓어지면서 하나의 JDK로 모든 영역을 감당하기 어려워졌다.
