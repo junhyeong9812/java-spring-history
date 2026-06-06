@@ -49,6 +49,28 @@ public class Account {
 
 영향 범위: 서블릿 컨테이너도 Jakarta 지원 버전 필요(Tomcat 10+, Jetty 11+ 등), 모든 서드파티 라이브러리도 jakarta 호환 버전으로 올려야 한다.
 
+다음 그림은 네임스페이스 전환의 before/after를 요약한다. import 패키지뿐 아니라 서블릿 컨테이너와 서드파티 의존성까지 함께 올려야 하는 호환성 단절이다.
+
+```mermaid
+flowchart LR
+    subgraph BEFORE["Before (Spring 5.x / Java EE)"]
+        B1["javax.servlet.*"]
+        B2["javax.persistence.*"]
+        B3["javax.validation.*"]
+        B4["Tomcat 9 / Jetty 9"]
+    end
+    subgraph AFTER["After (Spring 6.x / Jakarta EE)"]
+        A1["jakarta.servlet.*"]
+        A2["jakarta.persistence.*"]
+        A3["jakarta.validation.*"]
+        A4["Tomcat 10+ / Jetty 11+"]
+    end
+    B1 -->|"패키지 전환"| A1
+    B2 -->|"패키지 전환"| A2
+    B3 -->|"패키지 전환"| A3
+    B4 -->|"컨테이너 업그레이드"| A4
+```
+
 ### Java 17 baseline
 레코드, sealed 클래스, 텍스트 블록, 패턴 매칭 등을 프레임워크와 애플리케이션에서 자연스럽게 사용. 예를 들어 record를 그대로 DTO/설정 바인딩에 활용.
 
@@ -64,6 +86,19 @@ public AccountDto get(@PathVariable Long id) { ... }   // record 직렬화
 
 - 런타임 리플렉션 대신 빌드 타임 메타데이터 → 네이티브 이미지에서 동작 보장
 - AOT 처리된 컨텍스트의 **테스트**(TestContext AOT 지원)는 6.0부터 제공되며, 6.1에서 `failOnError` 옵션 등으로 보강됐다
+
+아래는 소스/빈 정의가 Spring AOT 처리를 거쳐 GraalVM 네이티브 실행 파일로 만들어지는 파이프라인이다. 동적 리플렉션·프록시를 컴파일 타임에 분석해 코드와 메타데이터 힌트로 미리 생성하므로, 런타임 리플렉션에 의존하지 않고 네이티브 이미지에서 동작이 보장된다.
+
+```mermaid
+flowchart LR
+    A["소스 코드 + 빈 정의 (@Configuration/@Bean)"] --> B["Spring AOT 처리"]
+    B --> B1["빈 정의 분석 → 빈 등록 코드 생성"]
+    B --> B2["리플렉션/프록시/리소스 메타데이터 힌트 생성"]
+    B1 --> C["생성된 소스 + reachability 힌트"]
+    B2 --> C
+    C --> D["GraalVM native-image (도달성 분석)"]
+    D --> E["네이티브 실행 파일 (수십 ms 시작, 저메모리)"]
+```
 
 ### 옵저버빌리티(Observability) — Micrometer 통합
 분산 추적과 메트릭을 위한 `Micrometer Observation API`를 코어에 통합. WebFlux/WebMVC 요청, `RestTemplate`/`WebClient`, `@Scheduled` 등에 일관된 관측 지점을 제공한다.
