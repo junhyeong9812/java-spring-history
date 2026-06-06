@@ -29,7 +29,7 @@ Object obj = ctx.lookup("java:comp/env/jdbc/MyDB");
 ```
 
 ### JPDA (Java Platform Debugger Architecture)
-- 표준 디버깅 인프라. JVM TI, JDWP(디버그 와이어 프로토콜), JDI(디버그 인터페이스)로 구성되어, IDE와 도구들이 일관된 방식으로 자바 프로그램을 원격 디버깅할 수 있게 했다.
+- 표준 디버깅 인프라. 1.3에서는 JVMDI(JVM Debug Interface), JDWP(디버그 와이어 프로토콜), JDI(디버그 인터페이스)로 구성되어, IDE와 도구들이 일관된 방식으로 자바 프로그램을 원격 디버깅할 수 있게 했다. (저수준 JVMDI는 이후 J2SE 5.0에서 JVMTI로 대체된다)
 
 ### Java Sound API
 - 오디오(샘플 기반 사운드, MIDI) 재생·녹음·합성을 위한 표준 API가 코어에 포함되었다.
@@ -38,12 +38,15 @@ Object obj = ctx.lookup("java:comp/env/jdbc/MyDB");
 - `java.lang.reflect.Proxy`를 통해 런타임에 인터페이스 구현 객체를 동적으로 생성하는 기능. AOP, 원격 호출 스텁, 프레임워크의 인터셉터 등에 폭넓게 활용되었다.
 
 ```java
+// 제네릭(Class<?>)·람다는 1.3에 없다 — raw Class[] + InvocationHandler 익명 클래스
 MyService proxy = (MyService) Proxy.newProxyInstance(
     MyService.class.getClassLoader(),
-    new Class<?>[]{ MyService.class },
-    (p, method, args) -> {
-        System.out.println("호출: " + method.getName());
-        return null;
+    new Class[]{ MyService.class },
+    new InvocationHandler() {
+        public Object invoke(Object p, Method method, Object[] args) throws Throwable {
+            System.out.println("호출: " + method.getName());
+            return null;
+        }
     });
 ```
 
@@ -53,7 +56,7 @@ MyService proxy = (MyService) Proxy.newProxyInstance(
 - 디버깅·프로파일링·성능 관련 개선이 전반적으로 이루어짐.
 
 ## 영향과 의의
-J2SE 1.3은 화려한 신기능보다 내실(성능·안정성·운영 인프라)을 다진 버전으로 평가된다. 특히 HotSpot의 기본 탑재는 자바를 서버 사이드 주류 언어로 끌어올리는 결정적 계기가 되었고, JNDI·JPDA는 이후 엔터프라이즈 자바와 개발 도구 생태계의 표준 토대가 되었다. "Kestrel" 이후 자바 릴리스에는 새(bird) 코드네임 전통이 자리잡았다.
+J2SE 1.3은 화려한 신기능보다 내실(성능·안정성·운영 인프라)을 다진 버전으로 평가된다. 특히 HotSpot의 기본 탑재는 자바를 서버 사이드 주류 언어로 끌어올리는 결정적 계기가 되었고, JNDI·JPDA는 이후 엔터프라이즈 자바와 개발 도구 생태계의 표준 토대가 되었다. 이 무렵부터 자바 릴리스에 코드네임이 본격적으로 붙기 시작했다(1.3 Kestrel, 1.4 Merlin은 맹금류(새) 이름이지만, 이후 5.0 Tiger·6 Mustang·7 Dolphin처럼 새에 국한되지는 않았다).
 
 ## 참고 출처
 - [Java version history - Wikipedia](https://en.wikipedia.org/wiki/Java_version_history)
