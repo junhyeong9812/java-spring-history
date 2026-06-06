@@ -72,6 +72,17 @@ mvn -Pnative spring-boot:build-image
 
 빌드 시점에 빈 구성과 프록시를 미리 계산해 리플렉션/동적 프록시 사용을 최소화한다. 서버리스·콜드스타트 민감 워크로드에 적합하다.
 
+빌드 도구에서 네이티브 실행 파일까지 이어지는 AOT 파이프라인은 다음과 같다.
+
+```mermaid
+flowchart LR
+    A["Gradle / Maven"] --> B["Spring AOT 처리<br/>(빈 구성·프록시 사전 계산)"]
+    B --> C["GraalVM native-image"]
+    C --> D["네이티브 실행 파일<br/>(빠른 시작 · 적은 메모리)"]
+```
+
+빌드 시점에 동적 동작을 정적으로 변환해, 리플렉션을 줄이고 OS 네이티브 바이너리를 만든다.
+
 ### 관측성 통합 (Observability — Micrometer Tracing)
 2.x의 Micrometer 메트릭에 더해, **Micrometer Observation API**와 **Micrometer Tracing**(구 Spring Cloud Sleuth의 후신)을 통합했다. 하나의 `Observation`으로 메트릭과 트레이스를 함께 생산하며 OpenTelemetry/Zipkin으로 내보낸다.
 
@@ -86,6 +97,19 @@ class OrderService {
     }
 }
 ```
+
+하나의 Observation이 메트릭과 분산 추적을 함께 만들어 백엔드로 내보내는 흐름은 다음과 같다.
+
+```mermaid
+flowchart LR
+    A["요청"] --> B["Micrometer Observation API"]
+    B --> C["메트릭<br/>(MeterRegistry)"]
+    B --> D["분산 추적<br/>(trace / span)"]
+    C --> E["Prometheus 등 메트릭 백엔드"]
+    D --> F["OpenTelemetry / Zipkin"]
+```
+
+단일 계측 지점(Observation)에서 메트릭과 트레이스를 동시에 생산해, Boot 3의 통합 옵저버빌리티를 구현한다.
 
 ### 가상 스레드 (Virtual Threads, 3.2 / Java 21)
 Java 21의 가상 스레드(Project Loom)를 설정 한 줄로 활성화한다. 블로킹 MVC 코드를 거의 그대로 두고도 높은 동시성을 얻을 수 있다.
