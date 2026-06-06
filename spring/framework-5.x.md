@@ -5,7 +5,7 @@
 ## 릴리스 정보
 - 최초 출시: 5.0 — 2017년 9월
 - 주요 마이너 버전과 시기: 5.0(2017-09) → 5.1(2018-09) → 5.2(2019-09/10) → 5.3(2020-10, 장기 지원)
-- 최소 자바 버전(baseline): Java 8 이상. 5.1에서 **Java 11** 정식 지원, 5.3에서 Java 17까지 실행 지원(JDK 8-17, 이후 패치로 21까지).
+- 최소 자바 버전(baseline): Java 8 이상. 5.1에서 **Java 11** 정식 지원. 5.3.0 GA(2020-10)는 JDK 8-15 대응으로 출시됐고, **JDK 17 실행 지원은 이후 5.3.x 유지보수 라인에서 추가**됐다(5.3.x는 JDK 21에서도 실행 가능하나, 프레임워크 차원의 가상 스레드 지원은 6.1부터다).
 - Java EE / Jakarta EE 기준: Java EE 7 베이스라인(Servlet 3.1, JPA 2.1, Bean Validation 1.1), Java EE 8 호환. **여전히 `javax.*` 네임스페이스 사용**(jakarta 전환은 6.0).
 
 ## 시대적 배경
@@ -54,6 +54,8 @@ public RouterFunction<ServerResponse> routes(AccountHandler handler) {
         .build();
 }
 ```
+
+> 참고: 위 `route()` 플루언트 빌더는 Spring Framework **5.1**에서 추가됐다. 5.0에서는 `RouterFunctions.route(GET("/accounts/{id}"), handler::get).andRoute(...)` 형태를 사용했다.
 
 ### WebClient — 리액티브 HTTP 클라이언트
 블로킹 `RestTemplate`을 대체하는 논블로킹 클라이언트.
@@ -127,7 +129,7 @@ fun stream(): Flow<Account> =        // Kotlin Flow (5.2+)
 - `spring-jcl` 도입(자체 Commons Logging 브릿지), 로깅 의존성 정리.
 - 5.1: Reactor Netty 0.8 기반 HTTP/2 지원, Kotlin beans DSL 정제, JDK 11 지원.
 - 5.2: Kotlin 코루틴/`Flow`, R2DBC(리액티브 관계형 DB) 초기 통합, 성능 개선.
-- 5.3: 데이터 바인딩·검증 개선, RSocket 안정화, Java 17 실행 지원.
+- 5.3: 데이터 바인딩·검증 개선, RSocket 안정화. (JDK 17 실행 지원은 GA 이후 5.3.x 유지보수 라인에서 추가)
 
 ## 설정 스타일의 변화
 설정의 기본은 이미 4.x/Boot에서 **Java Config + 어노테이션 + Boot 자동 구성**으로 굳어졌다. 5.x가 더한 것은 **함수형/DSL 스타일**이다.
@@ -140,7 +142,7 @@ fun stream(): Flow<Account> =        // Kotlin Flow (5.2+)
 - 5.0 (2017-09): **WebFlux/Reactor**, 함수형 라우팅, WebClient, **Kotlin 1급 지원(널 안정성·확장 함수·beans/router DSL)**, JUnit 5 지원, Java 8 baseline, `javax.*` 유지.
 - 5.1 (2018-09): **JDK 11 지원**, Reactor Netty 0.8 기반 HTTP/2, Kotlin beans DSL 정제, 성능·로깅 개선.
 - 5.2 (2019-09/10): **Kotlin 코루틴/`Flow` 지원**, R2DBC 통합, RSocket 지원, 관측용 Reactor checkpoint.
-- 5.3 (2020-10): 장기 지원(LTS급) 버전. RSocket·데이터 바인딩·CORS 개선, JDK 17 실행 지원(이후 패치로 JDK 21 가상 스레드 준비).
+- 5.3 (2020-10): 장기 지원(LTS급) 버전. RSocket·데이터 바인딩·CORS 개선. GA 시점은 JDK 8-15 대응이고 **JDK 17 실행 지원은 이후 5.3.x 유지보수 라인에서 추가**됐다(5.3.x는 JDK 21에서 실행 가능하나, 프레임워크 차원의 가상 스레드 지원 API는 6.1부터).
 
 ## 영향과 의의
 - **리액티브 프로그래밍**을 Spring 생태계의 정식 옵션으로 만들었다. WebFlux·WebClient·R2DBC·RSocket로 풀 논블로킹 스택 구성이 가능해졌다(단, 명령형 MVC가 사라진 것은 아니며 둘은 공존).
