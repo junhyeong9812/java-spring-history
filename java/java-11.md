@@ -88,7 +88,7 @@ Files.writeString(Path.of("out.txt"), "Hello, Java 11");
 - **JEP 335 — Nashorn 자바스크립트 엔진 deprecate**, **JEP 336 — Pack200 도구/API deprecate**.
 
 ## 영향과 의의
-Java 11은 **Java 8 이후 가장 중요한 LTS**로 평가받으며, 많은 기업이 8에서 곧바로 11로 이주했다(중간 9·10은 단기 릴리스라 건너뛴 경우가 많다). 표준 HTTP 클라이언트는 외부 라이브러리(Apache HttpClient, OkHttp) 없이도 현대적 HTTP 통신을 가능하게 했고, 모듈 시스템과 함께 자바를 더 모듈화된 플랫폼으로 만들었다. 동시에 Java EE/CORBA/JavaFX/Nashorn 제거는 "레거시 청산"의 신호였다.
+Java 11은 **Java 8 이후 가장 중요한 LTS**로 평가받으며, 많은 기업이 8에서 곧바로 11로 이주했다(중간 9·10은 단기 릴리스라 건너뛴 경우가 많다). 표준 HTTP 클라이언트는 외부 라이브러리(Apache HttpClient, OkHttp) 없이도 현대적 HTTP 통신을 가능하게 했고, 모듈 시스템과 함께 자바를 더 모듈화된 플랫폼으로 만들었다. 동시에 Java EE/CORBA/JavaFX 제거와 Nashorn deprecate(제거 예고, 실제 제거는 Java 15의 JEP 372)는 "레거시 청산"의 신호였다.
 
 가장 큰 파장은 **라이선스 변화**였다. Oracle JDK가 운영 환경에서 유료가 되면서, 생태계는 OpenJDK 기반 무료 배포판(Eclipse Temurin/Adoptium, Amazon Corretto, Azul Zulu, Microsoft Build of OpenJDK 등)으로 다변화되었다. 오늘날 "어떤 JDK 배포판을 쓸 것인가"라는 질문이 보편화된 출발점이 바로 Java 11이다.
 
