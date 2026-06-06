@@ -49,15 +49,16 @@ static double area(Shape shape) {
 }
 ```
 
-null 처리와 가드(`when`/guarded pattern)도 함께 실험됐다.
+null 처리와 가드(guarded pattern)도 함께 실험됐다. 단, 17 시대(JEP 406)의 가드 문법은 `when`이 아니라 `&&`였다. `when` 가드는 Java 19(JEP 427)에서 도입돼 Java 21(JEP 441)에서 정식화된다.
 
 ```java
 static String describe(Object obj) {
     return switch (obj) {
-        case null      -> "널";
-        case Integer i -> "정수 " + i;
-        case String s  -> "문자열 길이 " + s.length();
-        default        -> "기타";
+        case null                -> "널";
+        case Integer i && i > 10 -> "큰 정수 " + i; // 가드: 17 시대에는 &&
+        case Integer i           -> "정수 " + i;
+        case String s            -> "문자열 길이 " + s.length();
+        default                  -> "기타";
     };
 }
 ```
@@ -87,7 +88,7 @@ Apple Silicon(M1 등 AArch64 기반 Mac)을 네이티브로 지원. Apple이 자
 
 ### 새 macOS 렌더링 파이프라인 (JEP 382)
 
-Java 2D 내부 렌더링을, 2018년부터 deprecated된 Apple OpenGL 대신 **Apple Metal API** 기반으로 다시 구현했다.
+Java 2D에 **Apple Metal API** 기반 렌더링 파이프라인을 새로 추가했다. 다만 17 시점의 기본값은 여전히 OpenGL이며, Metal은 `-Dsun.java2d.metal=true` 옵션으로 켜는 opt-in 대안이다(OpenGL을 곧바로 대체한 것은 아니다). Apple OpenGL은 2018년부터 deprecated된 상태였다.
 
 ## 그 외 변경
 
