@@ -7,12 +7,12 @@
 - **주요 마이너 버전과 시기**:
   - 1.0 (2014-04) — 최초 GA
   - 1.1 (2014-06)
-  - 1.2 (2015-03) — `@SpringBootApplication` 단축 애너테이션 도입
+  - 1.2 (2014-12) — `@SpringBootApplication` 단축 애너테이션 도입
   - 1.3 (2015-11) — Developer Tools(devtools), 완전한 캐싱 자동 설정
   - 1.4 (2016-07) — 테스트 슬라이스(`@WebMvcTest`, `@DataJpaTest` 등), `@SpringBootTest` 재정비
   - 1.5 (2017-01) — 1.x 마지막 피처 라인, Actuator/Kafka 등 보강
 - **기반 Spring Framework 버전**: Spring Framework 4.x (1.0은 4.0, 1.5는 4.3)
-- **최소 자바 버전**: Java 6 (Java 7/8 권장, 서블릿 3.0+ 컨테이너 필요)
+- **최소 자바 버전**: 초기 1.x(1.0~1.2)는 Java 6, 1.3부터는 Java 7이 기본 (Java 6은 추가 설정으로만 호환, 서블릿 3.0+ 컨테이너 필요)
 
 ## 시대적 배경 (왜 Boot가 등장했나 — Spring의 설정 복잡성 문제)
 
@@ -123,7 +123,7 @@ spring run app.groovy
 
 ## 마이너 버전별 변화
 - **1.0 (2014)**: 자동 설정, 스타터, 내장 컨테이너, Actuator, CLI 등 핵심 골격 완성.
-- **1.2 (2015)**: `@SpringBootApplication` 도입(`@Configuration`+`@EnableAutoConfiguration`+`@ComponentScan` 결합), 서블릿 3.1/JTA 지원, 배너 커스터마이징.
+- **1.2 (2014-12)**: `@SpringBootApplication` 도입(`@Configuration`+`@EnableAutoConfiguration`+`@ComponentScan` 결합), 서블릿 3.1/JTA 지원, 배너 커스터마이징.
 - **1.3 (2015)**: `spring-boot-devtools`(자동 재시작/라이브 리로드), 완전한 캐시 자동 설정, fully executable jar.
 - **1.4 (2016)**: 테스트 개편 — `@SpringBootTest`, `@WebMvcTest`/`@DataJpaTest` 등 슬라이스 테스트, `@MockBean`. 커스텀 자동 설정 작성 개선.
 - **1.5 (2017)**: 1.x의 마지막 라인. Actuator 보안 개선, Kafka 지원, LDAP 자동 설정. 이후 개발 흐름은 2.0으로 이동.
