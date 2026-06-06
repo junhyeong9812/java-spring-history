@@ -65,6 +65,45 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 - `synchronized` 블록 안에서 블로킹하면 가상 스레드가 캐리어에 **고정(pinning)**되어 확장성이 떨어질 수 있다(이 한계는 이후 JDK 24의 JEP 491에서 해소된다). 21에서는 `ReentrantLock` 사용이 권장됐다.
 - CPU 바운드 작업에는 이점이 적다. 가상 스레드의 강점은 **블로킹 I/O가 많은 워크로드**에서 나온다.
 
+아래 흐름도는 가상 스레드의 mount/unmount 동작을 보여준다. 다수의 가상 스레드가 소수의 캐리어(플랫폼) 스레드 위에서 실행되다가, 블로킹 작업을 만나면 캐리어를 반납(unmount)하고 다른 가상 스레드가 그 캐리어에 mount된다. 덕분에 적은 OS 스레드로 수백만 개의 가상 스레드를 다룰 수 있다. 단, `synchronized` 블록·네이티브 호출 안에서 블로킹하면 가상 스레드가 캐리어에 고정(pinning)되어 반납되지 않을 수 있다.
+
+```mermaid
+flowchart TD
+    subgraph VTs["수십만~수백만 가상 스레드"]
+        V1["VT-1"]
+        V2["VT-2"]
+        V3["VT-3"]
+        Vn["VT-n ..."]
+    end
+    subgraph Carriers["소수 캐리어 스레드 (ForkJoinPool, OS 스레드)"]
+        C1["Carrier-1"]
+        C2["Carrier-2"]
+    end
+
+    V1 -->|"mount (실행)"| C1
+    V2 -->|"mount (실행)"| C2
+    V1 -.->|"블로킹 I/O 만남 → unmount (캐리어 반납)"| Heap["힙에 스택 보관 (대기)"]
+    V3 -->|"비어 있는 캐리어에 mount"| C1
+    Heap -.->|"I/O 완료 → 다른 캐리어에 재mount"| C2
+
+    P["synchronized / native 안 블로킹"] -.->|"pinning: 캐리어 점유 유지"| C1
+```
+
+플랫폼 스레드 모델과 가상 스레드 모델의 매핑 차이는 다음과 같다. 플랫폼 스레드는 OS 스레드와 1:1로 묶이지만, 가상 스레드는 캐리어 스레드 위에서 M:N으로 다중화된다.
+
+```mermaid
+flowchart LR
+    subgraph PM["플랫폼 스레드 모델 (1:1)"]
+        PT1["Platform Thread"] --- OS1["OS Thread"]
+        PT2["Platform Thread"] --- OS2["OS Thread"]
+    end
+    subgraph VM["가상 스레드 모델 (M:N)"]
+        VV1["Virtual Thread"] --> CC["Carrier (OS Thread)"]
+        VV2["Virtual Thread"] --> CC
+        VV3["Virtual Thread"] --> CC
+    end
+```
+
 ### 레코드 패턴 (JEP 440, Final/정식) ⭐
 Java 19(JEP 405)·20(JEP 432)의 프리뷰를 거쳐 **정식**이 되었다.
 - 패턴 매칭에서 **레코드를 분해(deconstruct)**하여 컴포넌트를 곧바로 바인딩한다. `instanceof`와 `switch` 모두에서 사용 가능하다.
