@@ -5,7 +5,7 @@
 ## 릴리스 정보
 - 최초 출시: 6.0 — 2022년 11월 16일
 - 주요 마이너 버전과 시기: 6.0(2022-11) → 6.1(2023-11) → 6.2(2024-11)
-- 최소 자바 버전(baseline): **Java 17** (6.x 최초로 Java 17을 강제. 6.1+는 Java 21까지 정식 지원)
+- 최소 자바 버전(baseline): **Java 17** (6.x 최초로 Java 17을 강제. 6.1은 JDK 21을 first-class 지원, 6.2는 JDK 17-25 범위 지원)
 - Java EE / Jakarta EE 기준: **Jakarta EE 9 baseline, Jakarta EE 10 호환** (6.2는 Jakarta EE 9-10, JDK 17-25 범위)
 
 ## 시대적 배경
@@ -63,7 +63,7 @@ public AccountDto get(@PathVariable Long id) { ... }   // record 직렬화
 빌드 시점에 빈 정의·프록시·리플렉션 메타데이터를 미리 분석·생성(AOT)하여, GraalVM으로 **네이티브 실행 파일**을 만든다. 결과적으로 시작 시간 수십 ms, 메모리 대폭 절감 — 서버리스·컨테이너 환경에 유리. (Spring Boot 3.0이 이 AOT 엔진을 빌드 플러그인으로 노출한다.)
 
 - 런타임 리플렉션 대신 빌드 타임 메타데이터 → 네이티브 이미지에서 동작 보장
-- 6.1에서는 JVM/네이티브 양쪽에서 AOT 처리된 컨텍스트의 **테스트**까지 지원
+- AOT 처리된 컨텍스트의 **테스트**(TestContext AOT 지원)는 6.0부터 제공되며, 6.1에서 `failOnError` 옵션 등으로 보강됐다
 
 ### 옵저버빌리티(Observability) — Micrometer 통합
 분산 추적과 메트릭을 위한 `Micrometer Observation API`를 코어에 통합. WebFlux/WebMVC 요청, `RestTemplate`/`WebClient`, `@Scheduled` 등에 일관된 관측 지점을 제공한다.
@@ -100,7 +100,7 @@ Account account = client.get()
 Java 21의 가상 스레드(Project Loom)를 지원. 요청당 스레드(thread-per-request) 모델을 유지하면서도 블로킹 I/O를 값싸게 처리 — 리액티브의 복잡함 없이 높은 동시성을 얻는 대안. (Spring Boot 3.2에서 `spring.threads.virtual.enabled=true`로 Tomcat/Jetty에 적용.)
 
 ### 기타 (6.1 / 6.2)
-- 6.1: **RestClient**, **JdbcClient**(유창형 JDBC API), 가상 스레드, `@Scheduled` Micrometer 계측, AOT 테스트 지원, Reactor/Jackson 등 의존성 현대화, JDK 21 지원.
+- 6.1: **RestClient**, **JdbcClient**(유창형 JDBC API), 가상 스레드, `@Scheduled` Micrometer 계측, AOT 테스트 보강(`failOnError` 등 — AOT 컨텍스트 테스트 자체는 6.0 도입), Reactor/Jackson 등 의존성 현대화, JDK 21 지원.
 - 6.2: 빈 백그라운드 초기화·컨테이너 시작 성능 개선, `@Fallback` 빈, 널 안정성 개선, Jackson/검증/메시징 업데이트, JDK 17-25 범위 지원. (이후 7.0이 2025-11에 등장하며 다음 세대로 이어진다.)
 
 ## 설정 스타일의 변화
