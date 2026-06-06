@@ -41,7 +41,7 @@
 | Java SE 24 | 2025-03 | — | | 역대 최다(24 JEP), Class-File API·Stream Gatherers 정식, 양자내성 암호 | [java-24.md](java-24.md) |
 | Java SE 25 | 2025-09 | — | ✅ | Scoped Values·Module Import·Compact Source Files·Flexible Constructors 정식 | [java-25.md](java-25.md) |
 
-> LTS(Long-Term Support): Java 11, 17, 21, 25 (Java 8도 사실상 장기 지원). 6개월 케이던스 시대에는 짝수 9월 릴리스(11, 17, 21, 25...)가 LTS다.
+> LTS(Long-Term Support): Java 8, 11, 17, 21, 25. 6개월 케이던스 시대에는 9월 릴리스 중 Oracle이 지정한 버전(11, 17, 21, 25...)이 LTS이며, "짝수성"으로 정해지는 것이 아니다(11·17·21·25는 홀수). 초기엔 3년 간격이었다가 2023년부터 2년 주기로 단축되었다.
 
 ---
 
@@ -54,7 +54,7 @@
 **Java 5의 제네릭·어노테이션**이 언어를 바꿨고, 이는 Spring·Hibernate·JUnit 등 어노테이션 기반 생태계의 토대가 됐다. Java 7은 Oracle 인수 후 첫 릴리스로 Project Coin과 NIO.2를 도입했다.
 
 ### 3부. 함수형 혁명과 모듈화 (2014~2017) — Java 8, 9
-**Java 8의 람다·Stream**은 자바 작성 방식을 근본적으로 바꿨다. Java 9는 모듈 시스템과 함께 6개월 릴리스 케이던스 시대를 열었다.
+**Java 8의 람다·Stream**은 자바 작성 방식을 근본적으로 바꿨다. Java 9는 모듈 시스템을 도입한 구(舊) 비정기 모델의 마지막 릴리스였고, 6개월 정기 케이던스로의 전환이 이때 발표되었다(실제 첫 6개월 주기 릴리스는 Java 10, 2018-03).
 
 ### 4부. 빠른 진화 (2018~2021) — Java 10 ~ 17
 6개월마다 릴리스되며 `var`, switch 표현식, 텍스트 블록, record, sealed class, 패턴 매칭이 preview → 정식 경로를 밟았다. Java 11·17이 LTS.
@@ -73,7 +73,7 @@
 | 2018~ | **LTS 도입** | 처음엔 3년 주기(11, 17), 2023부터 2년 주기(21, 25)로 단축 |
 
 - **개발 주체:** JDK 1.0~1.4 = Sun Microsystems / Java 5~6 = Sun (JCP 주도) / Java 7~ = Oracle (2010년 Sun 인수)
-- **변경 절차:** Java 5 이전은 비공식 → Java 1.4부터 JCP(JSR) → Java 9 전후부터 **JEP**(JDK Enhancement Proposal)가 중심
+- **변경 절차:** 초기에는 비공식 절차 → J2SE 1.4(JSR 59)·5.0(JSR 176)부터 JCP의 JSR로 플랫폼 명세가 정식화 → Java 9 전후부터는 개별 기능을 **JEP**(JDK Enhancement Proposal)로 추적(단, 플랫폼 자체는 지금도 Java SE 버전마다 JSR로 명세된다)
 
 ---
 
