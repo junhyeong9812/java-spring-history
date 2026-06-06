@@ -63,6 +63,46 @@ AccountService service = (AccountService) ctx.getBean("accountService");
 
 EJB와의 결정적 차이: `AccountServiceImpl`은 어떤 Spring 인터페이스도 구현하지 않는 순수 POJO이며, 컨테이너 없이도 `new`로 만들어 단위 테스트할 수 있다.
 
+아래는 컨테이너가 관리하는 빈의 생명주기다. XML 빈 정의를 읽어 인스턴스를 만들고, 의존성을 주입한 뒤, 초기화 콜백을 거쳐 사용 가능 상태가 되며, 컨테이너 종료 시 소멸 콜백이 호출된다.
+
+```mermaid
+flowchart TD
+    load["빈 정의 로드 (XML)"]
+    instantiate["인스턴스화 (생성자 호출)"]
+    populate["의존성 주입 (populate)"]
+    bppBefore["BeanPostProcessor 전처리"]
+    init["초기화 (afterPropertiesSet / init-method)"]
+    bppAfter["BeanPostProcessor 후처리"]
+    ready["사용 가능 (빈 제공)"]
+    destroy["소멸 (destroy / destroy-method)"]
+
+    load --> instantiate
+    instantiate --> populate
+    populate --> bppBefore
+    bppBefore --> init
+    init --> bppAfter
+    bppAfter --> ready
+    ready --> destroy
+```
+
+`BeanFactory`와 `ApplicationContext`의 관계는 다음과 같다. `ApplicationContext`는 `BeanFactory`의 모든 기능을 포함하면서 메시지 소스, 이벤트, AOP, 리소스 로딩 등 엔터프라이즈 기능을 더한 상위 컨테이너다.
+
+```mermaid
+flowchart TD
+    bf["BeanFactory<br/>(기본 IoC, 지연 로딩)"]
+    ac["ApplicationContext<br/>(확장 컨테이너)"]
+    feat1["메시지 소스 (i18n)"]
+    feat2["이벤트 발행/구독"]
+    feat3["AOP 통합"]
+    feat4["리소스 로딩"]
+
+    bf -->|확장| ac
+    ac --> feat1
+    ac --> feat2
+    ac --> feat3
+    ac --> feat4
+```
+
 ### AOP (관점 지향 프로그래밍)
 트랜잭션·로깅·보안 같은 횡단 관심사(cross-cutting concern)를 비즈니스 코드와 분리한다. 1.x 시절에는 어노테이션이 아니라 XML + 프록시 기반으로 구성했다.
 
