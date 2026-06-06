@@ -5,11 +5,11 @@
 ## 릴리스 정보
 - 최초 출시: 3.0 — 2009년 12월
 - 주요 마이너 버전과 시기: 3.0(2009-12) → 3.1(2011-12) → 3.2(2012-12)
-- 최소 자바 버전(baseline): Java 5 (Spring 최초로 Java 5를 정식 요구, 제네릭·어노테이션 전면 활용)
-- Java EE / Jakarta EE 기준: Java EE 5 기반, 일부 Java EE 6 지원(Servlet 2.5 이상, 3.0 권장)
+- 최소 자바 버전(baseline): Java 5 이상 (Spring 최초로 Java 5를 정식 요구, 제네릭·어노테이션 전면 활용)
+- Java EE / Jakarta EE 기준: J2EE 1.4 / Java EE 5와 호환(일부 Java EE 6 기능 지원). 서블릿 컨테이너도 Tomcat 5.0 / Jetty 5.1 등 구버전과 호환.
 
 ## 시대적 배경
-2.5에서 어노테이션 주입과 컴포넌트 스캔이 정착했지만, **빈을 "정의"하는 일은 여전히 XML의 몫**이었다(`<bean>` 또는 `<context:component-scan>`). 한편 자바 진영에는 Guice(Google) 같은 순수 코드 기반 DI 컨테이너가 등장해 "타입 안전한 자바 설정"의 매력을 보여줬다. Java 5가 충분히 보급된 2009년, Spring 3.0은 코드베이스를 Java 5 기준으로 재정비하고 **JavaConfig**를 코어에 정식 편입했다. 이로써 "XML이냐 어노테이션이냐 자바냐"라는 세 가지 설정 스타일이 모두 갖춰졌다.
+2.5의 컴포넌트 스캔과 스테레오타입(`@Component` 등)으로 **내가 작성한 빈은 XML 없이 등록**할 수 있게 됐다. 다만 서드파티 객체처럼 어노테이션을 붙일 수 없는 빈을 자바 코드만으로 "정의"하는 수단(`@Configuration`/`@Bean`)은 아직 없어, 이런 빈은 여전히 XML `<bean>`의 몫이었다. 한편 자바 진영에는 Guice(Google) 같은 순수 코드 기반 DI 컨테이너가 등장해 "타입 안전한 자바 설정"의 매력을 보여줬다. Java 5가 충분히 보급된 2009년, Spring 3.0은 코드베이스를 Java 5 기준으로 재정비하고 **JavaConfig**를 코어에 정식 편입했다. 이로써 "XML이냐 어노테이션이냐 자바냐"라는 세 가지 설정 스타일이 모두 갖춰졌다.
 
 ## 핵심 추가/변경 기능
 
@@ -112,16 +112,24 @@ public class ReportService {
 `Environment` 추상화와 `@Profile`로 개발/운영 등 환경별 빈 구성을 분리. 프로퍼티 소스도 통합 관리(`@PropertySource`).
 
 ```java
+// 3.1의 @Profile은 @Target(TYPE) — 클래스(설정) 단위로만 붙일 수 있다.
+// (@Bean 메서드 단위 @Profile은 Spring 4.0부터 가능)
 @Configuration
-public class DataSourceConfig {
+@Profile("dev")
+public class DevDataSourceConfig {
 
-    @Bean @Profile("dev")
-    public DataSource devDataSource() {
+    @Bean
+    public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder().build();   // H2 등 임베디드
     }
+}
 
-    @Bean @Profile("prod")
-    public DataSource prodDataSource() {
+@Configuration
+@Profile("prod")
+public class ProdDataSourceConfig {
+
+    @Bean
+    public DataSource dataSource() {
         return jndiDataSource();                          // 운영 DB
     }
 }
@@ -153,8 +161,8 @@ public class BookService {
 
 ## 마이너 버전별 변화
 - 3.0 (2009-12): **Java 5 베이스라인**, `@Configuration`/`@Bean`(Java Config), SpEL, REST 지원(`@PathVariable` 등), `@Async`, OXM, JSR-303 검증 통합.
-- 3.1 (2011-12): **환경/프로파일 추상화(`@Profile`)**, 캐시 추상화(`@Cacheable`/`@EnableCaching`), `@PropertySource`, `c:` 네임스페이스, Java 기반 MVC 설정(`@EnableWebMvc`), 서블릿 3.0 기반 `WebApplicationInitializer`(web.xml 없는 부트스트랩).
-- 3.2 (2012-12): Spring MVC 비동기 처리(`Callable`/`DeferredResult`), `@ControllerAdvice` 전역 예외 처리, MVC 테스트 프레임워크(`MockMvc`), Servlet 3 기반 파일 업로드, Gradle 빌드 전환.
+- 3.1 (2011-12): **환경/프로파일 추상화(`@Profile`)**, 캐시 추상화(`@Cacheable`/`@EnableCaching`), `@PropertySource`, `c:` 네임스페이스, Java 기반 MVC 설정(`@EnableWebMvc`), 서블릿 3.0 기반 `WebApplicationInitializer`(web.xml 없는 부트스트랩), Servlet 3.0 기반 파일 업로드(`StandardServletMultipartResolver`).
+- 3.2 (2012-12): **Spring MVC 비동기 처리(`Callable`/`DeferredResult`)**, `@ControllerAdvice` 전역 예외 처리, MVC 테스트 프레임워크(`MockMvc`), `@MatrixVariable`·콘텐츠 협상 개선, Gradle 빌드 전환.
 
 ## 영향과 의의
 - **Java Config의 도입**으로 "설정도 코드다"라는 인식이 확산됐고, XML 의존을 끊을 수 있는 길이 열렸다.
