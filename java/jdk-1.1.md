@@ -3,7 +3,7 @@
 > 자바를 "장난감 언어"에서 본격적인 엔터프라이즈 개발 플랫폼으로 끌어올린 버전. 내부 클래스, JDBC, RMI, 리플렉션, JavaBeans 등 오늘날까지 쓰이는 핵심 인프라가 대거 등장했다.
 
 ## 릴리스 정보
-- 정식 출시일: 1997년 2월 19일 (위키피디아 기준) — 단, Oracle/java.com 릴리스 표에는 1997년 3월 28일로 표기되어 출처에 따라 갈린다
+- 정식 출시일: 1997년 2월 (위키피디아는 1997-02-19, Oracle·javaalmanac 릴리스 표는 1997-02-18로 출처에 따라 하루 차이가 난다) — 흔히 인용되는 1997-03-28은 JDK 1.1이 아니라 후속 패치 릴리스 JDK 1.1.1의 날짜다
 - 개발 주체: Sun Microsystems
 - 공식 명칭: JDK 1.1
 - 코드네임: 없음
@@ -30,8 +30,10 @@ button.addActionListener(new ActionListener() {   // 익명 내부 클래스
 
 ```java
 // 1.0: public boolean action(Event e, Object arg) { ... }  (오버라이드 방식)
-// 1.1: 리스너 등록 방식
-button.addActionListener(e -> { /* ... */ }); // (람다는 후일이지만 등록 모델 자체는 1.1)
+// 1.1: 리스너 등록 방식 (당시 문법은 익명 내부 클래스; 람다는 Java 8부터)
+button.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) { /* ... */ }
+});
 ```
 
 ### JavaBeans
@@ -72,9 +74,10 @@ public interface Hello extends java.rmi.Remote {
 - 실행 중에 클래스의 필드·메서드·생성자 정보를 조회하는 기능(1.1에서는 주로 인트로스펙션 위주). JavaBeans, 직렬화, 후일의 프레임워크(Spring 등)의 근간이 되었다.
 
 ```java
-Class<?> c = obj.getClass();
-for (java.lang.reflect.Method m : c.getMethods()) {
-    System.out.println(m.getName());
+Class c = obj.getClass();   // 제네릭(Class<?>)은 J2SE 5.0부터 — 1.1에선 raw type
+java.lang.reflect.Method[] methods = c.getMethods();
+for (int i = 0; i < methods.length; i++) {   // for-each도 5.0부터
+    System.out.println(methods[i].getName());
 }
 ```
 
