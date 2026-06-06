@@ -68,12 +68,16 @@ void main() {
 - 명시적 생성자 호출(`super(...)`/`this(...)`) 이전에 인자 검증·필드 준비 등의 문장을 둘 수 있다. JDK 22의 JEP 447에서 출발해 LTS에서 정식화되었다.
 
 ```java
-class Temperature {
-    final double celsius;
-    Temperature(double value) {
-        if (value < -273.15)                      // super 이전 검증
+class Measurement {
+    final double value;
+    Measurement(double value) { this.value = value; }
+}
+
+class Temperature extends Measurement {
+    Temperature(double celsius) {
+        if (celsius < -273.15)                    // 명시적 super(...) 호출 전 검증
             throw new IllegalArgumentException("절대영도 미만");
-        this.celsius = value;
+        super(celsius);                           // 검증 뒤에 오는 명시적 부모 생성자 호출
     }
 }
 ```
