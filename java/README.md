@@ -43,6 +43,46 @@
 
 > LTS(Long-Term Support): Java 8, 11, 17, 21, 25. 6개월 케이던스 시대에는 9월 릴리스 중 Oracle이 지정한 버전(11, 17, 21, 25...)이 LTS이며, "짝수성"으로 정해지는 것이 아니다(11·17·21·25는 홀수). 초기엔 3년 간격이었다가 2023년부터 2년 주기로 단축되었다.
 
+### 버전 타임라인 (다이어그램)
+
+아래는 주요 분기점이 된 버전을 연도·핵심 키워드와 함께 정리한 타임라인이다.
+
+```mermaid
+timeline
+    title Java 주요 버전 타임라인
+    1996 : JDK 1.0 - JVM/바이트코드, AWT, 애플릿
+    1998 : J2SE 1.2 - Swing, Collections, JIT
+    2004 : Java 5 - 제네릭, 어노테이션, enum
+    2014 : Java 8 - 람다, Stream, java.time
+    2017 : Java 9 - 모듈 시스템 Jigsaw, jshell
+    2018 : Java 11 LTS - 표준 HTTP 클라이언트
+    2021 : Java 17 LTS - sealed 클래스 정식
+    2023 : Java 21 LTS - 가상 스레드 정식
+    2025 : Java 25 LTS - Scoped Values 정식
+```
+
+### 언어 기능 계보: preview에서 정식까지
+
+주요 언어 기능이 preview 단계를 거쳐 어느 버전에서 정식화됐는지 보여준다.
+
+```mermaid
+flowchart LR
+    subgraph TB["텍스트 블록"]
+        TB1["13: preview"] --> TB2["14: 2차 preview"] --> TB3["15: 정식"]
+    end
+    subgraph RC["record"]
+        RC1["14: preview"] --> RC2["15: 2차 preview"] --> RC3["16: 정식"]
+    end
+    subgraph SW["switch 패턴 매칭"]
+        SW1["17: preview"] --> SW2["18~20: 추가 preview"] --> SW3["21: 정식"]
+    end
+    subgraph VT["가상 스레드"]
+        VT1["19: preview"] --> VT2["20: 2차 preview"] --> VT3["21: 정식"]
+    end
+```
+
+위 네 기능 모두 "preview에서 여러 버전을 거쳐 정식화"되는 6개월 케이던스 시대의 전형적 도입 경로를 따른다.
+
 ---
 
 ## 시대 구분으로 읽기
@@ -71,6 +111,15 @@
 | 1996~2017 (JDK 1.0 ~ Java 9) | 비정기 (수년 간격) | 기능이 모일 때마다 릴리스. Java 6→7 사이 약 5년 공백 |
 | 2017~ (Java 10 이후) | **6개월 정기 케이던스** | 매년 3월/9월 릴리스. 기능은 preview → 정식으로 점진 도입 |
 | 2018~ | **LTS 도입** | 처음엔 3년 주기(11, 17), 2023부터 2년 주기(21, 25)로 단축 |
+
+릴리스 모델은 크게 세 단계로 변해 왔다.
+
+```mermaid
+flowchart LR
+    A["비정기 (1996~2017)<br/>기능이 모이면 릴리스"] --> B["6개월 케이던스 (2018~)<br/>매년 3월/9월 정기 릴리스"] --> C["LTS 2년 주기 (2023~)<br/>21, 25... 2년 간격 LTS"]
+```
+
+비정기 대형 릴리스에서 6개월 정기 릴리스로, 다시 LTS 주기가 3년에서 2년으로 짧아지는 흐름이다.
 
 - **개발 주체:** JDK 1.0~1.4 = Sun Microsystems / Java 5~6 = Sun (JCP 주도) / Java 7~ = Oracle (2010년 Sun 인수)
 - **변경 절차:** 초기에는 비공식 절차 → J2SE 1.4(JSR 59)·5.0(JSR 176)부터 JCP의 JSR로 플랫폼 명세가 정식화 → Java 9 전후부터는 개별 기능을 **JEP**(JDK Enhancement Proposal)로 추적(단, 플랫폼 자체는 지금도 Java SE 버전마다 JSR로 명세된다)
