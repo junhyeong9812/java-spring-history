@@ -164,7 +164,7 @@ open class MyService { open fun work() { } }
 class MyService { fun work() { } }
 ```
 
-마찬가지로 JPA 엔티티는 `kotlin-jpa`(no-arg)가 없으면 기본 생성자가 없어 Hibernate가 인스턴스를 만들지 못한다.
+마찬가지로 JPA 엔티티는 `kotlin-jpa`(no-arg)가 없으면 기본 생성자가 없어 Hibernate가 인스턴스를 만들지 못한다. 다만 `kotlin-jpa`는 인자 없는 생성자만 합성할 뿐 클래스를 `open`으로 만들지는 않는다. 게다가 `@Entity`는 Spring 스테레오타입이 아니어서 `kotlin-spring`(all-open)의 기본 대상에도 포함되지 않는다. 따라서 Hibernate의 지연 로딩(프록시 서브클래싱) 등을 위해 엔티티를 non-final로 두려면, `allOpen` 설정에 JPA 애너테이션(`jakarta.persistence.Entity`/`MappedSuperclass`/`Embeddable`)을 직접 지정하거나 클래스에 `open`을 붙여야 한다.
 
 ## 자바 vs 코틀린: 같은 Spring 코드 비교
 
@@ -188,7 +188,8 @@ public class User {
 }
 ```
 ```kotlin
-// Kotlin (kotlin-jpa 플러그인 전제)
+// Kotlin (kotlin-jpa로 no-arg 생성자 생성;
+//         지연 로딩 프록시를 쓰려면 allOpen에 @Entity 추가하거나 class에 open 필요)
 @Entity
 class User(
     var name: String,
