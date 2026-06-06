@@ -50,6 +50,20 @@ public class UserController {
 }
 ```
 
+명령형(MVC)과 리액티브(WebFlux)가 한 프레임워크에서 어떤 스택 위에 놓이는지 비교하면 다음과 같다.
+
+```mermaid
+flowchart LR
+    subgraph MVC["Spring MVC (명령형)"]
+        M1["Spring MVC<br/>(블로킹 처리)"] --> M2["서블릿 API"] --> M3["Tomcat<br/>(서블릿 컨테이너 + 스레드풀)"]
+    end
+    subgraph FLUX["Spring WebFlux (리액티브)"]
+        F1["Mono / Flux"] --> F2["Reactor<br/>(논블로킹)"] --> F3["Netty"]
+    end
+```
+
+같은 Boot 위에서 워크로드 특성에 따라 블로킹(MVC)과 논블로킹(WebFlux) 스택을 선택한다.
+
 함수형 라우터(WebFlux.fn) 예시:
 
 ```java
@@ -76,6 +90,19 @@ management:
 ```
 
 엔드포인트 경로도 `/actuator/*` 아래로 통일되고 노출 정책이 명시적(opt-in)으로 바뀌었다.
+
+Micrometer가 계측 파사드로 끼어들어 메트릭이 다양한 백엔드로 흘러가는 파이프라인은 다음과 같다.
+
+```mermaid
+flowchart LR
+    A["애플리케이션<br/>(Actuator 계측)"] --> B["Micrometer<br/>(계측 파사드)"]
+    B --> C["MeterRegistry<br/>(레지스트리)"]
+    C -->|"pull: /actuator/prometheus scrape"| D["Prometheus"]
+    C -->|"push"| E["Datadog"]
+    C -->|"push"| F["Influx / JMX 등"]
+```
+
+하나의 계측 코드(Micrometer)가 레지스트리를 거쳐 벤더 중립적으로 여러 모니터링 백엔드로 내보낸다. 단, 전송 방식은 백엔드마다 달라서 Prometheus는 애플리케이션이 노출한 `/actuator/prometheus` 엔드포인트를 Prometheus 서버가 **scrape(pull)**하고, Datadog·Influx 등은 애플리케이션이 **push**한다.
 
 ### Kotlin 1급 지원
 Spring Framework 5의 Kotlin 지원을 Boot 차원에서 흡수했다. **start.spring.io의 언어 선택지에 Kotlin이 정식 포함**되었고, 생성 시 `kotlin-spring`/`kotlin-jpa` 컴파일러 플러그인과 Kotlin용 스타터 의존성이 자동 구성된다.
