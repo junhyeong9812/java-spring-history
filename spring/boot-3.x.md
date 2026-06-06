@@ -8,9 +8,9 @@
   - 3.0 (2022-11) — Spring Framework 6, Java 17, Jakarta EE 9, GraalVM 네이티브, 관측성 신규
   - 3.1 (2023-05) — Docker Compose 지원, Testcontainers 통합, Spring Authorization Server 1.1
   - 3.2 (2023-11) — Java 21 지원, **가상 스레드(Virtual Threads)**, `RestClient`/`JdbcClient`, CRaC, Spring Framework 6.1
-  - 3.3 (2024-05) — CDS(Class Data Sharing) 통합, Bitnami 기반 기본 컨테이너 이미지, 보안/관측성 개선
-  - 3.4 (2024-11) — 구조화된 로깅(structured logging), `RestClient`/`RestTemplate` 클라이언트 자동 설정 확장, Testcontainers/Docker Compose SSL
-  - 3.5 (2025-05) — 3.x 후속 라인 (설정/Actuator/빌드 개선)
+  - 3.3 (2024-05) — CDS(Class Data Sharing) 통합, Docker Compose에서 Bitnami 이미지 지원, 보안/관측성 개선
+  - 3.4 (2024-11) — 구조화된 로깅(structured logging), `RestClient`/`RestTemplate` 클라이언트 자동 설정 확장, 기본 Buildpacks 빌더 변경(Paketo `builder-jammy-java-tiny`)
+  - 3.5 (2025-05) — 3.x 후속 라인 (Testcontainers/Docker Compose SSL 구성, 설정/Actuator/빌드 개선)
 - **기반 Spring Framework 버전**: Spring Framework 6.x (3.0은 6.0, 3.2는 6.1)
 - **최소 자바 버전**: **Java 17** (가상 스레드 등 일부 기능은 Java 21 필요)
 
@@ -123,9 +123,9 @@ services:
 - **3.0 (2022)**: Java 17, Jakarta EE 9, Spring Framework 6, GraalVM 네이티브/AOT, 관측성(Observation/Tracing), `spring.factories` 자동 설정 → `AutoConfiguration.imports` 전환 완료.
 - **3.1 (2023)**: Docker Compose 지원, Testcontainers 통합(`@ServiceConnection`), SSL 번들, Spring Authorization Server 1.1.
 - **3.2 (2023)**: Java 21·가상 스레드, `RestClient`/`JdbcClient`, CRaC(Coordinated Restore at Checkpoint), Spring Framework 6.1.
-- **3.3 (2024)**: CDS로 기동 가속, Bitnami 기반 기본 OCI 이미지, 보안/관측성 보강.
-- **3.4 (2024)**: 구조화된 로깅(JSON 로그), `RestClient`/`RestTemplate`용 HTTP 클라이언트(Reactor Netty/JDK) 자동 설정, Testcontainers·Docker Compose SSL 설정.
-- **3.5 (2025)**: 설정·Actuator·빌드 도구 다듬기 등 후속 개선.
+- **3.3 (2024)**: CDS로 기동 가속, Docker Compose에서 Bitnami 이미지 지원, 보안/관측성 보강.
+- **3.4 (2024)**: 구조화된 로깅(JSON 로그), `RestClient`/`RestTemplate`용 HTTP 클라이언트(Reactor Netty/JDK) 자동 설정, 기본 Buildpacks 빌더를 Paketo `builder-jammy-base`에서 `builder-jammy-java-tiny`로 변경.
+- **3.5 (2025)**: Testcontainers·Docker Compose SSL 구성 지원, 설정·Actuator·빌드 도구 다듬기 등 후속 개선.
 
 ## 영향과 의의
 - **클라우드 네이티브로의 재정렬**: 네이티브 이미지·가상 스레드·관측성 표준 통합으로, Spring을 서버리스/컨테이너 비용 모델에 맞게 현대화했다.
