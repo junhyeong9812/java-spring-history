@@ -30,8 +30,8 @@ List<Account> accounts = jdbcTemplate.query(
 @DateTimeFormat(iso = ISO.DATE)
 private LocalDate openDate;
 
-// Optional 파라미터 (4.1+)
-@GetMapping("/search")
+// Optional 파라미터 (4.1+) — @GetMapping은 4.3부터이므로 4.1/4.2에서는 @RequestMapping을 쓴다
+@RequestMapping(value = "/search", method = RequestMethod.GET)
 public List<Account> search(@RequestParam Optional<String> keyword) { ... }
 ```
 
@@ -67,9 +67,12 @@ public class CacheConfig {
 `spring-websocket` 모듈로 표준 WebSocket(JSR-356)과 SockJS 폴백, STOMP 메시징을 지원. 실시간 양방향 통신을 위한 메시징 인프라(`spring-messaging`) 도입.
 
 ```java
+// 4.x의 WebSocketMessageBrokerConfigurer 인터페이스에는 default 메서드가 없어
+// 직접 구현하면 모든 추상 메서드를 구현해야 한다. 필요한 메서드만 재정의하려면
+// AbstractWebSocketMessageBrokerConfigurer를 상속한다. (인터페이스 default화는 5.0부터)
 @Configuration
 @EnableWebSocketMessageBroker
-public class WsConfig implements WebSocketMessageBrokerConfigurer {
+public class WsConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -109,8 +112,8 @@ beans {
 
 ## 마이너 버전별 변화
 - 4.0 (2013-12): **Java 8 지원(람다·`java.time`)**, `@RestController`, `@Conditional`, WebSocket/STOMP(`spring-websocket`, `spring-messaging`), Groovy DSL, Java EE 7 일부 지원.
-- 4.1 (2014-09): JCache(JSR-107), `ResponseEntity`/`RequestEntity` 빌더, `@Sql` 테스트, MVC 뷰 해석 개선, WebSocket 개선.
-- 4.2 (2015-07): `@AliasFor`, `@EventListener`, 전역/메서드 CORS, HTTP 스트리밍, SpEL 컴파일러.
+- 4.1 (2014-09): JCache(JSR-107), `ResponseEntity`/`RequestEntity` 빌더, `@Sql` 테스트, MVC 뷰 해석 개선, WebSocket 개선, SpEL 컴파일러(compiler mode).
+- 4.2 (2015-07): `@AliasFor`, `@EventListener`, 전역/메서드 CORS, HTTP 스트리밍.
 - 4.3 (2016-06): `@GetMapping` 등 합성 매핑 어노테이션, 암묵적 생성자 주입, `@RequestScope`/`@SessionScope`. Java 6+/Servlet 2.5+ 지원의 마지막 세대(장기 지원).
 
 ## 영향과 의의
