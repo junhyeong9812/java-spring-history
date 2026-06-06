@@ -11,7 +11,7 @@
 - LTS 여부: 해당 시대엔 LTS 개념 없음
 
 ## 시대적 배경
-Java SE 6(2006) 이후 무려 약 5년의 공백이 있었다. Sun의 경영난, JCP 내부 갈등, 그리고 2009~2010년 Oracle의 Sun 인수 절차가 겹치며 Java 7의 출시가 크게 지연되었다. Oracle은 인수 후 "기능을 다 채우고 늦게 내기보다, 준비된 것부터 내자"는 **Plan B**를 채택해 람다·모듈 같은 대형 기능은 Java 8로 미루고, 완성된 기능들로 Java 7을 먼저 출시했다.
+Java SE 6(2006) 이후 무려 약 5년의 공백이 있었다. Sun의 경영난, JCP 내부 갈등, 그리고 2009~2010년 Oracle의 Sun 인수 절차가 겹치며 Java 7의 출시가 크게 지연되었다. Oracle은 인수 후 "기능을 다 채우고 늦게 내기보다, 준비된 것부터 내자"는 **Plan B**를 채택해 람다는 Java 8로, 모듈(Project Jigsaw)은 Java 9로 미루고, 완성된 기능들로 Java 7을 먼저 출시했다.
 
 언어 측면에서는 Joshua Bloch가 제안한 **Project Coin** — 큰 부담 없이 일상 코드를 간결하게 만드는 작은 문법 개선들의 묶음(JSR 334) — 이 핵심이었다.
 
@@ -57,9 +57,14 @@ Map<String, List<Integer>> map = new HashMap<>(); // 타입 추론으로 간결
 ```java
 String cmd = "start";
 switch (cmd) {
-    case "start" -> System.out.println("시작");
-    case "stop"  -> System.out.println("정지");
-    default      -> System.out.println("알 수 없음");
+    case "start":
+        System.out.println("시작");
+        break;
+    case "stop":
+        System.out.println("정지");
+        break;
+    default:
+        System.out.println("알 수 없음");
 }
 ```
 
@@ -109,9 +114,9 @@ boolean ok = file.delete(); // 실패 사유를 알기 어려움
 import java.nio.file.*;
 
 Path path = Paths.get("data.txt");
-Files.delete(path); // 실패 시 구체적 예외(NoSuchFileException 등)
-List<String> lines = Files.readAllLines(path);
+List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
 Files.copy(path, Paths.get("backup.txt"));
+Files.delete(path); // 실패 시 구체적 예외(NoSuchFileException 등)
 ```
 
 ### Fork/Join 프레임워크 (JSR 166y)
@@ -139,7 +144,7 @@ long total = new ForkJoinPool().invoke(new SumTask(data, 0, data.length));
 JVM 바이트코드에 동적 메서드 호출을 위한 새 명령 `invokedynamic`과 `java.lang.invoke`(MethodHandle) API가 추가되었다. 정적 타입에 묶이지 않은 호출을 효율적으로 지원해 JRuby, Groovy 등 JVM 동적 언어의 성능을 끌어올렸고, Java 8 람다 구현의 기반이 되었다.
 
 ## 그 외 변경 / API 추가
-- G1 (Garbage-First) 가비지 컬렉터 도입 (CMS를 잇는 차세대 GC)
+- G1 (Garbage-First) 가비지 컬렉터 도입 — Java 7 GA에서는 experimental 상태였고, 정식 지원은 7u4부터 (CMS를 잇는 차세대 GC)
 - 동시성 유틸리티 보강: `Phaser`, `ThreadLocalRandom`, `ConcurrentLinkedDeque`
 - `java.util.Objects` 유틸리티 클래스 (`requireNonNull`, `equals`, `hash` 등)
 - 향상된 타입 추론 및 가변인자 경고(`@SafeVarargs`)
@@ -147,7 +152,7 @@ JVM 바이트코드에 동적 메서드 호출을 위한 새 명령 `invokedynam
 - 클라이언트 측 RIA(Rich Internet Application) 관련 개선 (Java FX 별도 발전)
 
 ## 영향과 의의
-Java SE 7은 Oracle 체제에서 Java가 정상적으로 발전을 재개했음을 보여준 릴리스다. Project Coin의 작은 문법 개선들(try-with-resources, diamond, multi-catch, switch-on-String)은 일상 코드의 장황함을 눈에 띄게 줄였고, NIO.2는 노후한 `java.io.File` API를 대체했다. 특히 Fork/Join과 invokedynamic은 그 자체로도 유용했지만, 1년 뒤 Java 역사상 또 한 번의 분수령이 되는 **Java 8의 람다와 스트림**을 떠받치는 인프라로서 더 큰 의미를 가진다.
+Java SE 7은 Oracle 체제에서 Java가 정상적으로 발전을 재개했음을 보여준 릴리스다. Project Coin의 작은 문법 개선들(try-with-resources, diamond, multi-catch, switch-on-String)은 일상 코드의 장황함을 눈에 띄게 줄였고, NIO.2는 노후한 `java.io.File` API를 대체했다. 특히 Fork/Join과 invokedynamic은 그 자체로도 유용했지만, 약 2년 8개월 뒤(2014년 3월) Java 역사상 또 한 번의 분수령이 되는 **Java 8의 람다와 스트림**을 떠받치는 인프라로서 더 큰 의미를 가진다.
 
 ## 참고 출처
 - [Java version history — Wikipedia](https://en.wikipedia.org/wiki/Java_version_history)
