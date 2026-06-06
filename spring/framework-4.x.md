@@ -50,6 +50,31 @@ public class AccountApi {
 }
 ```
 
+다음은 `@RestController`/`@ResponseBody`가 뷰를 거치지 않고 `HttpMessageConverter`(Jackson)로 객체↔JSON을 변환해 응답하는 흐름이다. 실제로는 `DispatcherServlet`이 직접 컨버터를 호출하지 않고, `RequestMappingHandlerAdapter`의 반환값 처리기(`RequestResponseBodyMethodProcessor`)가 컨버터를 사용한다.
+
+```mermaid
+sequenceDiagram
+    participant C as "Client (JSON)"
+    participant DS as DispatcherServlet
+    participant HA as "HandlerAdapter / ReturnValueHandler"
+    participant RC as "@RestController"
+    participant SVC as AccountService
+    participant MC as "HttpMessageConverter (Jackson)"
+
+    C->>DS: "HTTP 요청 (Accept: application/json)"
+    DS->>HA: "핸들러 실행 위임"
+    HA->>RC: "핸들러 메서드 호출 (@PathVariable 등 바인딩)"
+    RC->>SVC: "비즈니스 로직 호출"
+    SVC-->>RC: "도메인 객체 (Account)"
+    RC-->>HA: "반환값 (객체) — @ResponseBody 적용"
+    HA->>MC: "객체 → JSON 직렬화 (ReturnValueHandler가 호출)"
+    MC-->>HA: "JSON 본문"
+    HA-->>DS: "완료"
+    DS-->>C: "HTTP 응답 (뷰 해석 없이 데이터 직렬화)"
+```
+
+`@RestController`는 `@Controller`+`@ResponseBody`의 합성이라 모든 반환값이 뷰가 아닌 응답 본문으로 처리되며, 요청 본문(JSON)도 같은 컨버터로 객체로 역직렬화된다.
+
 ### @Conditional — 조건부 빈 등록
 환경/클래스패스/프로퍼티 등 조건에 따라 빈 등록 여부를 결정하는 일반화된 메커니즘. **Spring Boot 자동 구성의 핵심 엔진**(`@ConditionalOnClass`, `@ConditionalOnMissingBean` 등은 모두 이 위에 구현됨).
 
