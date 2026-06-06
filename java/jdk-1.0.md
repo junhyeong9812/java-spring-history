@@ -6,7 +6,7 @@
 - 정식 출시일: 1996년 1월 23일
 - 개발 주체: Sun Microsystems
 - 공식 명칭: JDK 1.0 (안정판은 JDK 1.0.2)
-- 코드네임: 없음
+- 코드네임: 통상 Oak로 기록됨 (정확히는 자바의 전신 언어/프로젝트 이름으로, 1.0의 공식 릴리스 코드네임이라기보다 비공식적으로 Oak라 불린다)
 
 ## 시대적 배경
 1990년대 중반은 웹 브라우저가 막 대중화되던 시기였다. 당시 웹은 정적인 HTML 문서 중심이었고, 브라우저 안에서 동적인 프로그램을 실행할 방법이 마땅치 않았다. Sun Microsystems는 원래 가전기기용 임베디드 언어(Oak 프로젝트)로 출발했던 기술을 인터넷 시대에 맞게 재정비하여 "자바"로 발표했다.
@@ -39,8 +39,8 @@ public class MyFrame extends Frame {
     public MyFrame() {
         setTitle("AWT 예제");
         add(new Button("클릭"));
-        setSize(200, 100);
-        setVisible(true);
+        resize(200, 100);  // JDK 1.0에는 setSize/setVisible이 없다
+        show();
     }
     public static void main(String[] args) {
         new MyFrame();
