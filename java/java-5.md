@@ -86,8 +86,10 @@ public enum Season { SPRING, SUMMER, FALL, WINTER }
 
 Season s = Season.SPRING;
 switch (s) {
-    case SPRING -> {}
-    default -> {}
+    case SPRING:
+        break;
+    default:
+        break;
 }
 
 // enum은 필드와 메서드도 가질 수 있는 완전한 클래스
@@ -161,7 +163,9 @@ Doug Lea가 주도한 고수준 동시성 라이브러리가 표준에 편입되
 
 ```java
 ExecutorService pool = Executors.newFixedThreadPool(4);
-Future<Integer> f = pool.submit(() -> 1 + 1);
+Future<Integer> f = pool.submit(new Callable<Integer>() {
+    public Integer call() { return 1 + 1; }
+});
 Integer result = f.get();
 pool.shutdown();
 ```
@@ -177,7 +181,7 @@ String line = sc.next();
 
 ## 그 외 변경 / API 추가
 - `printf` / `format` 스타일 포매팅 (`java.util.Formatter`)
-- `StringBuilder` 추가 (비동기 버전으로 `StringBuffer`보다 빠름)
+- `StringBuilder` 추가 (`StringBuffer`의 동기화하지 않는(non-synchronized) 버전으로 단일 스레드에서 더 빠름)
 - `java.lang.instrument` 패키지 (자바 에이전트 기반 계측)
 - JVM Tool Interface(JVMTI), JPDA 개선
 - 공유 클래스 데이터(Class Data Sharing)로 시작 시간 단축
