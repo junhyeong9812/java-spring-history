@@ -41,6 +41,33 @@ client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
       .thenAccept(System.out::println);
 ```
 
+아래 시퀀스 다이어그램은 동기 `send()`와 비동기 `sendAsync()`의 차이를 보여준다. 동기 호출은 응답이 올 때까지 호출 스레드가 블로킹되지만, 비동기 호출은 즉시 `CompletableFuture`를 반환하고 논블로킹 I/O 완료 후 콜백(`thenApply`)이 실행된다. 이때 `thenApply` 콜백은 원래 호출 스레드가 아니라 완료를 수행한 스레드에서 실행될 수 있다(호출 스레드 실행을 보장하려면 `thenApplyAsync(fn, executor)`를 쓴다).
+
+```mermaid
+sequenceDiagram
+    participant App as "호출 스레드"
+    participant Client as "HttpClient"
+    participant IO as "논블로킹 I/O (셀렉터)"
+    participant Server as "서버"
+    participant CB as "완료 스레드(콜백)"
+
+    Note over App,Server: 동기 send() — 응답까지 블로킹
+    App->>Client: send(request)
+    Client->>Server: HTTP 요청
+    Server-->>Client: HTTP 응답
+    Client-->>App: HttpResponse 반환 (이때까지 대기)
+
+    Note over App,Server: 비동기 sendAsync() — 논블로킹
+    App->>Client: sendAsync(request)
+    Client-->>App: CompletableFuture 즉시 반환
+    Client->>IO: 요청 등록 (스레드 점유 안 함)
+    IO->>Server: HTTP 요청
+    Server-->>IO: HTTP 응답 도착
+    IO-->>Client: 완료 통지
+    Client->>Client: CompletableFuture 완료
+    Client->>CB: thenApply 콜백 실행 (원래 호출 스레드 아님)
+```
+
 ### 람다 파라미터에 대한 지역변수 문법 (JEP 323)
 - 상태: 정식 기능
 - Java 10의 `var`를 **람다 파라미터**에도 쓸 수 있게 했다. 단독으로는 타입을 명시하는 것과 차이가 없지만, 모든 파라미터에 어노테이션(`@NonNull` 등)이나 수식어를 일관되게 붙일 수 있다는 장점이 있다. 단, 일부 파라미터만 `var`로 쓰거나 명시적 타입과 섞을 수 없다(모두 `var`이거나 모두 명시이거나).
