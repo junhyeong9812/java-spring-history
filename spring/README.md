@@ -7,8 +7,8 @@
 ## 이 책의 구성
 
 Spring은 두 축으로 진화했다.
-- **Spring Framework** — IoC/DI 컨테이너를 핵심으로 한 본체 (1.x ~ 6.x)
-- **Spring Boot** — 자동 설정으로 Spring 사용을 간소화한 상위 레이어 (1.x ~ 3.x)
+- **Spring Framework** — IoC/DI 컨테이너를 핵심으로 한 본체 (1.x ~ 7.x. 본 문서는 6.x까지 상세, 7.0은 최신 동향으로 표기)
+- **Spring Boot** — 자동 설정으로 Spring 사용을 간소화한 상위 레이어 (1.x ~ 4.x. 본 문서는 3.x까지 상세, 4.0은 최신 동향으로 표기)
 
 여기에 사용자가 특별히 요청한 **Kotlin과 Spring의 통합사**를 별도 문서로 정리했다.
 
@@ -24,6 +24,9 @@ Spring은 두 축으로 진화했다.
 | 2013~16 | **4.0**(13.12) / 4.3 | **1.0**(14.04) | Java 8 지원, `@RestController` / Boot 등장(자동 설정·스타터) |
 | 2017~20 | **5.0**(17.09) / 5.2 / 5.3 | **2.0**(18.03) | **리액티브(WebFlux) + Kotlin 1급 지원** / Boot 2.0 Kotlin 정식 지원, 5.2 코루틴 |
 | 2022~ | **6.0**(22.11) / 6.1 / 6.2 | **3.0**(22.11) / 3.1~3.4 | **Java 17 + Jakarta EE 9(javax→jakarta)**, GraalVM 네이티브/AOT, 가상 스레드 |
+| 2025~ | **7.0**(25.11.13 GA) | **4.0**(25.11.20 GA) | **현재 최신 세대** — Java 17 baseline(Java 25 수용), Jakarta EE 11, JSpecify 널 안정성, API 버저닝, Boot 코드베이스 모듈화 |
+
+> 본 문서의 상세 설명은 Framework 6.x / Boot 3.x까지 다룬다. 7.0/4.0은 위 타임라인에 최신 동향으로만 표기하며 별도 상세 문서는 두지 않는다.
 
 ---
 
@@ -33,9 +36,9 @@ Spring은 두 축으로 진화했다.
 | 대버전 | 최초 출시 | 최소 자바 | 핵심 | 문서 |
 |--------|-----------|-----------|------|------|
 | 1.x | 2004-03 | Java 1.3 | IoC/DI, AOP, XML 설정 | [framework-1.x.md](framework-1.x.md) |
-| 2.x | 2006-10 | Java 1.4/5 | XML 네임스페이스, 어노테이션 시작 | [framework-2.x.md](framework-2.x.md) |
+| 2.x | 2006-10 | Java 1.3+ (2.5는 1.4.2+) | XML 네임스페이스, 어노테이션 시작 | [framework-2.x.md](framework-2.x.md) |
 | 3.x | 2009-12 | Java 5 | Java Config, SpEL, REST | [framework-3.x.md](framework-3.x.md) |
-| 4.x | 2013-12 | Java 6/8 | Java 8 지원, `@RestController`, WebSocket | [framework-4.x.md](framework-4.x.md) |
+| 4.x | 2013-12 | Java 6 (Java 8은 지원 기능) | Java 8 지원, `@RestController`, WebSocket | [framework-4.x.md](framework-4.x.md) |
 | 5.x | 2017-09 | Java 8 | **리액티브(WebFlux) + Kotlin 1급** | [framework-5.x.md](framework-5.x.md) |
 | 6.x | 2022-11 | Java 17 | **Jakarta EE 9+, AOT/네이티브** | [framework-6.x.md](framework-6.x.md) |
 
@@ -54,10 +57,10 @@ Spring은 두 축으로 진화했다.
 ## 설정 스타일의 변천 (한눈에)
 
 ```
-XML BeanFactory          어노테이션              Java Config            함수형 DSL / Boot
-(2004, 1.x)       →      (2007, 2.5)      →     (2009, 3.0)      →     (2014~, Boot / Kotlin)
-<bean .../>             @Component              @Configuration         @SpringBootApplication
-config.xml             @Autowired             @Bean                  beans { } / router { }
+XML BeanFactory     어노테이션         Java Config        Boot 자동설정              함수형/Kotlin DSL
+(2004, 1.x)    →    (2007, 2.5)   →    (2009, 3.0)   →    (2014, Boot)         →    (2017, Framework 5.0)
+<bean .../>         @Component         @Configuration     @SpringBootApplication    beans { } / router { }
+config.xml          @Autowired         @Bean             (auto-configuration)
 ```
 
 자바 진영의 흐름:
