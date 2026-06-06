@@ -164,7 +164,7 @@ Duration d = Duration.between(now, now.plusHours(2)); // PT2H
 ZonedDateTime seoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 ```
 
-### Optional<T> (JEP 명세 일부, java.util.Optional)
+### Optional<T> (별도 JEP 아님, JSR 335 / Java SE 8 라이브러리 API, java.util.Optional @since 1.8)
 - 값이 있을 수도/없을 수도 있음을 타입으로 표현하여 `NullPointerException`을 줄이고 의도를 명시하는 컨테이너.
 - `map`, `filter`, `flatMap`, `orElse`, `orElseGet`, `orElseThrow`, `ifPresent`로 함수형 처리.
 
