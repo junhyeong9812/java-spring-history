@@ -88,6 +88,40 @@ public class AccountRestController {
 }
 ```
 
+아래는 `DispatcherServlet`을 단일 진입점(Front Controller)으로 하는 Spring MVC 요청 처리 흐름이다. 디스패처가 HandlerMapping으로 핸들러를 찾고, **HandlerAdapter**를 통해 컨트롤러를 호출한다. 반환값이 뷰 기반(`ModelAndView`)이면 ViewResolver/View로 렌더링하고, REST(`@ResponseBody`/`@RestController`)면 ViewResolver를 거치지 않고 HttpMessageConverter가 본문을 직렬화한다.
+
+```mermaid
+sequenceDiagram
+    participant Client as Client
+    participant DS as DispatcherServlet
+    participant HM as HandlerMapping
+    participant HA as HandlerAdapter
+    participant C as "Controller (@RequestMapping)"
+    participant VR as ViewResolver
+    participant V as View
+    participant MC as HttpMessageConverter
+
+    Client->>DS: HTTP 요청
+    DS->>HM: 핸들러 조회
+    HM-->>DS: 핸들러(Controller) 반환
+    DS->>HA: 핸들러 실행 위임
+    HA->>C: 컨트롤러 메서드 호출
+    alt 뷰 기반 (ModelAndView 반환)
+        C-->>HA: ModelAndView (뷰 이름 + 모델)
+        HA-->>DS: ModelAndView
+        DS->>VR: 뷰 이름 해석
+        VR-->>DS: View 반환
+        DS->>V: 모델로 렌더링
+        V-->>DS: 렌더링 결과
+    else REST (@ResponseBody / @RestController)
+        C-->>HA: 객체 반환
+        HA->>MC: 객체 → JSON 직렬화 (ViewResolver 생략)
+        MC-->>HA: 응답 본문
+        HA-->>DS: 완료
+    end
+    DS-->>Client: HTTP 응답
+```
+
 ### 선언적 비동기 / 스케줄링 (@Async, @Scheduled)
 `@Async`로 메서드를 비동기 실행, `@Scheduled`로 주기 작업을 어노테이션만으로 등록.
 
