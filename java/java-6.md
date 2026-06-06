@@ -26,7 +26,7 @@ import javax.script.*;
 ScriptEngineManager manager = new ScriptEngineManager();
 ScriptEngine engine = manager.getEngineByName("JavaScript");
 Object result = engine.eval("var x = 10; x * 2;");
-System.out.println(result); // 20
+System.out.println(result); // 20.0 (Rhino는 JS 숫자를 Double로 반환)
 
 // Java 변수를 스크립트로 바인딩
 engine.put("name", "Mustang");
@@ -49,7 +49,7 @@ System.out.println(result == 0 ? "컴파일 성공" : "실패");
 컴파일 시점에 어노테이션을 처리하는 표준 API(`javax.annotation.processing`, `javax.lang.model`)가 도입되었다. 별도 도구였던 `apt`를 대체하며, 이후 Lombok·Dagger·MapStruct 같은 코드 생성 도구의 토대가 된다.
 
 ### JDBC 4.0 (JSR 221)
-데이터베이스 접근이 한결 간결해졌다. 드라이버 자동 로딩(`Class.forName` 불필요), `SQLException` 계층 개선, 어노테이션 기반 SQL 질의 등이 추가되었다.
+데이터베이스 접근이 한결 간결해졌다. 드라이버 자동 로딩(`Class.forName` 불필요), `SQLException` 계층 개선(`SQLException`이 `Iterable`을 구현, 원인별 서브클래스 추가), `SQLXML`·`RowId`·`NClob` 등 새 SQL 타입 지원이 추가되었다.
 
 도입 전 (JDBC 3.0):
 ```java
