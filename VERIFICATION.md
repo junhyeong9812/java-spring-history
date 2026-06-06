@@ -53,3 +53,20 @@
 기각/보정:
 - codex가 "kotlin-spring(all-open)이 `@Entity`를 open으로 만든다"고 전제한 부분은 **틀림** → 웹 재검증 후 "`@Entity`는 all-open 기본 대상이 아니며, `open` 또는 `allOpen` 직접 지정 필요"로 정확히 보정.
 - `java-10/13/16`은 지적 없음.
+
+## 호출 3 (다이어그램 검증 — Mermaid 문법 + 기술 정확성)
+
+각 문서에 추가한 Mermaid 다이어그램(총 36개, 19개 파일)을 codex로 검증했다.
+
+- 호출 ID: `java-spring-history/cross-validation/003`
+- 대상: 다이어그램이 추가된 19개 파일 (파일별 개별 호출, 병렬 6)
+- 점검 항목: ① Mermaid 문법 유효성(렌더 가능 여부) ② 묘사된 의존성/흐름의 기술적 정확성
+- 사전 기계 검증: Python으로 펜스 균형·타입 키워드·subgraph/alt-end 균형·특수문자 라벨 따옴표 처리 확인(36블록 통과)
+- 결과: **문법 오류 0건**. 14개 파일 `NO_ISSUES`, 5개 파일에서 기술 정확성 7건 지적 → 전부 채택.
+
+### 채택한 정확성 정정
+- `java-11.md`: `thenApply` 콜백은 원래 호출 스레드가 아니라 완료 스레드에서 실행됨 → 별도 콜백 스레드로 표현 + 설명 보강.
+- `boot-2.x.md`: ① MVC 스택 의존 방향 정정(Spring MVC → Servlet API → Tomcat). ② Prometheus는 push가 아니라 `/actuator/prometheus`를 **scrape(pull)** → 화살표 라벨로 pull/push 구분.
+- `framework-3.x.md`: ① DispatcherServlet이 Controller를 **HandlerAdapter**를 통해 호출하도록 정정. ② REST(`@ResponseBody`)는 ViewResolver를 거치지 않고 HttpMessageConverter로 직렬화되는 분기를 `alt`로 추가.
+- `framework-4.x.md`: `@ResponseBody` 직렬화는 DispatcherServlet이 직접 컨버터를 호출하는 게 아니라 HandlerAdapter의 ReturnValueHandler가 호출 → 시퀀스에 HandlerAdapter 추가.
+- `kotlin-and-spring.md`: `CoroutineCrudRepository <--> ReactiveCrudRepository`는 양방향 타입 변환이 아님 → 코루틴 API 추상화가 리액티브 인프라 위에서 동작하는 단방향 관계로 정정(suspend↔Mono, Flow↔Flux는 양방향 유지).
