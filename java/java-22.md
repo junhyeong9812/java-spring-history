@@ -115,7 +115,7 @@ String msg = STR."Hello \{name}, version \{22}";
 
 ## 영향과 의의
 
-FFM API의 정식화는 자바 생태계에서 오랜 숙원이던 안전한 네이티브 상호운용의 표준화를 의미하며, 향후 JNI 사용 제한(JDK 24의 JEP 472)으로 이어지는 출발점이 되었다. 또한 Stream Gatherers, 생성자 본문 유연화 등 이후 LTS(Java 25)에서 정식화될 기능들이 본격적으로 모습을 드러낸 릴리스로, "Java 25 LTS로 가는 길목"의 성격이 강하다.
+FFM API의 정식화는 자바 생태계에서 오랜 숙원이던 안전한 네이티브 상호운용의 표준화를 의미하며, 향후 JNI 사용 제한(JDK 24의 JEP 472)으로 이어지는 출발점이 되었다. 또한 Stream Gatherers(Java 24에서 정식화), 생성자 본문 유연화(Java 25에서 정식화) 등 이후 정식화될 기능들이 본격적으로 모습을 드러낸 릴리스로, "Java 25 LTS로 가는 길목"의 성격이 강하다.
 
 ## 참고 출처
 - [JDK 22 - OpenJDK 프로젝트 페이지](https://openjdk.org/projects/jdk/22/)
