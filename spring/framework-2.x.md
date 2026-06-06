@@ -47,6 +47,20 @@ DTD 대신 XSD 스키마를 채택하고, 도메인별 전용 네임스페이스
 ### AspectJ 통합 (@AspectJ 스타일 AOP)
 Spring 자체 AOP(프록시 기반)를 그대로 유지하면서, AspectJ의 포인트컷 표현식과 `@Aspect`(@AspectJ) 어노테이션 스타일을 추가로 채택. AOP가 훨씬 강력하고 표현력 있게 바뀌었다.
 
+아래는 프록시 기반 AOP의 동작이다. 호출자는 타깃 빈을 직접 부르지 않고 프록시를 거치며, 프록시가 before/around/after 어드바이스(횡단 관심사)를 적용한 뒤 실제 타깃 메서드를 호출한다.
+
+```mermaid
+flowchart LR
+    caller["호출자 (Caller)"]
+    proxy["프록시 (Proxy)<br/>before / around / after advice"]
+    target["타깃 빈 (Target Bean)<br/>비즈니스 로직"]
+
+    caller -->|메서드 호출| proxy
+    proxy -->|어드바이스 적용 후 위임| target
+    target -->|결과 반환| proxy
+    proxy -->|결과 반환| caller
+```
+
 ```xml
 <aop:aspectj-autoproxy/>
 ```
@@ -73,6 +87,20 @@ public class LoggingAspect {
 - `@Autowired` — 타입 기반 자동 주입
 - `@Qualifier` — 동일 타입 다중 빈 구분
 - `<context:component-scan>` — 패키지 스캔으로 빈 자동 등록
+
+아래는 2.5의 컴포넌트 스캔 흐름이다. classpath를 훑어 스테레오타입 어노테이션이 붙은 클래스를 찾아내고, 각각을 BeanDefinition으로 만들어 컨테이너에 등록한다.
+
+```mermaid
+flowchart TD
+    scan["classpath 스캔<br/>(base-package)"]
+    detect["스테레오타입 탐지<br/>@Component / @Service / @Controller / @Repository"]
+    register["BeanDefinition 등록"]
+    container["컨테이너 (ApplicationContext)"]
+
+    scan --> detect
+    detect --> register
+    register --> container
+```
 
 ```xml
 <!-- XML은 스캔 지시만 남는다 -->
