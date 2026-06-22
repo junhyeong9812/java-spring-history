@@ -1,4 +1,4 @@
-# Java 변천사 — JDK 1.0부터 Java 25까지
+# Java 변천사 — JDK 1.0부터 Java 26까지
 
 > 자바 언어와 플랫폼의 역사를 버전별로 정리한 "책". 각 장(章)은 한 버전이며, 어떤 기능이 언제 추가되었는지, 그 배경과 의의를 다룬다.
 
@@ -40,6 +40,7 @@
 | Java SE 23 | 2024-09 | — | | 마크다운 Javadoc, 세대별 ZGC 기본화, String Templates 철회 | [java-23.md](java-23.md) |
 | Java SE 24 | 2025-03 | — | | 역대 최다(24 JEP), Class-File API·Stream Gatherers 정식, 양자내성 암호 | [java-24.md](java-24.md) |
 | Java SE 25 | 2025-09 | — | ✅ | Scoped Values·Module Import·Compact Source Files·Flexible Constructors 정식 | [java-25.md](java-25.md) |
+| Java SE 26 | 2026-03 | — | | HTTP/3 클라이언트, AOT 객체 캐싱(Any GC), final 무결성 준비, Applet API 제거 | [java-26.md](java-26.md) |
 
 > LTS(Long-Term Support): Java 8, 11, 17, 21, 25. 6개월 케이던스 시대에는 9월 릴리스 중 Oracle이 지정한 버전(11, 17, 21, 25...)이 LTS이며, "짝수성"으로 정해지는 것이 아니다(11·17·21·25는 홀수). 초기엔 3년 간격이었다가 2023년부터 2년 주기로 단축되었다.
 
@@ -59,6 +60,7 @@ timeline
     2021 : Java 17 LTS - sealed 클래스 정식
     2023 : Java 21 LTS - 가상 스레드 정식
     2025 : Java 25 LTS - Scoped Values 정식
+    2026 : Java 26 - HTTP/3 클라이언트, AOT 객체 캐싱(Any GC)
 ```
 
 ### 언어 기능 계보: preview에서 정식까지
@@ -99,8 +101,8 @@ flowchart LR
 ### 4부. 빠른 진화 (2018~2021) — Java 10 ~ 17
 6개월마다 릴리스되며 `var`, switch 표현식, 텍스트 블록, record, sealed class, 패턴 매칭이 preview → 정식 경로를 밟았다. Java 11·17이 LTS.
 
-### 5부. Loom과 패턴 매칭의 완성 (2022~2025) — Java 18 ~ 25
-**가상 스레드(Project Loom)**, record 패턴, switch 패턴 매칭이 정식화(Java 21)되고, FFM API(Project Panama), Scoped Values, 모듈 임포트 등이 자리잡았다. Java 21·25가 LTS.
+### 5부. Loom과 패턴 매칭의 완성 (2022~2026) — Java 18 ~ 26
+**가상 스레드(Project Loom)**, record 패턴, switch 패턴 매칭이 정식화(Java 21)되고, FFM API(Project Panama), Scoped Values, 모듈 임포트 등이 자리잡았다. Java 21·25가 LTS. 비-LTS인 Java 26은 HTTP/3 클라이언트와 모든 GC에 적용되는 AOT 객체 캐싱을 정식화하고, 구조적 동시성·원시 타입 패턴은 다음 LTS(Java 29)를 향해 프리뷰를 이어간다.
 
 ---
 

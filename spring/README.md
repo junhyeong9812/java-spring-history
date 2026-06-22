@@ -7,8 +7,8 @@
 ## 이 책의 구성
 
 Spring은 두 축으로 진화했다.
-- **Spring Framework** — IoC/DI 컨테이너를 핵심으로 한 본체 (1.x ~ 7.x. 본 문서는 6.x까지 상세, 7.0은 최신 동향으로 표기)
-- **Spring Boot** — 자동 설정으로 Spring 사용을 간소화한 상위 레이어 (1.x ~ 4.x. 본 문서는 3.x까지 상세, 4.0은 최신 동향으로 표기)
+- **Spring Framework** — IoC/DI 컨테이너를 핵심으로 한 본체 (1.x ~ 7.x)
+- **Spring Boot** — 자동 설정으로 Spring 사용을 간소화한 상위 레이어 (1.x ~ 4.x)
 
 여기에 사용자가 특별히 요청한 **Kotlin과 Spring의 통합사**를 별도 문서로 정리했다.
 
@@ -59,8 +59,6 @@ flowchart TD
 | 2022~ | **6.0**(22.11) / 6.1 / 6.2 | **3.0**(22.11) / 3.1~3.4 | **Java 17 + Jakarta EE 9(javax→jakarta)**, GraalVM 네이티브/AOT, 가상 스레드 |
 | 2025~ | **7.0**(25.11.13 GA) | **4.0**(25.11.20 GA) | **현재 최신 세대** — Java 17 baseline(Java 25 수용), Jakarta EE 11, JSpecify 널 안정성, API 버저닝, Boot 코드베이스 모듈화 |
 
-> 본 문서의 상세 설명은 Framework 6.x / Boot 3.x까지 다룬다. 7.0/4.0은 위 타임라인에 최신 동향으로만 표기하며 별도 상세 문서는 두지 않는다.
-
 아래 타임라인은 Framework 대버전·Boot 대버전과 자바 baseline의 대응 관계를 한눈에 보여준다.
 
 ```mermaid
@@ -90,6 +88,7 @@ timeline
 | 4.x | 2013-12 | Java 6 (Java 8은 지원 기능) | Java 8 지원, `@RestController`, WebSocket | [framework-4.x.md](framework-4.x.md) |
 | 5.x | 2017-09 | Java 8 | **리액티브(WebFlux) + Kotlin 1급** | [framework-5.x.md](framework-5.x.md) |
 | 6.x | 2022-11 | Java 17 | **Jakarta EE 9+, AOT/네이티브** | [framework-6.x.md](framework-6.x.md) |
+| 7.x | 2025-11 | Java 17 (Java 25 권장) | **Jakarta EE 11, JSpecify 널 안정성, 코어 회복성, API 버저닝** | [framework-7.x.md](framework-7.x.md) |
 
 ### Spring Boot (자동 설정 레이어)
 | 대버전 | 최초 출시 | 기반 Framework | 최소 자바 | 핵심 | 문서 |
@@ -97,6 +96,7 @@ timeline
 | 1.x | 2014-04 | 4.x | Java 6 | 자동 설정, 스타터, 내장 톰캣, Actuator | [boot-1.x.md](boot-1.x.md) |
 | 2.x | 2018-03 | 5.x | Java 8 | WebFlux, Micrometer, **Kotlin 공식 지원** | [boot-2.x.md](boot-2.x.md) |
 | 3.x | 2022-11 | 6.x | Java 17 | Jakarta, GraalVM 네이티브, 가상 스레드 | [boot-3.x.md](boot-3.x.md) |
+| 4.x | 2025-11 | 7.x | Java 17 (Java 25 1급) | 자동설정 모듈화, JSpecify, Jackson 3, API 버저닝 | [boot-4.x.md](boot-4.x.md) |
 
 ### Kotlin
 - [kotlin-and-spring.md](kotlin-and-spring.md) — 코틀린이 언제·어떻게 Spring에 들어왔는가, 자바와 코틀린의 공존 방식
