@@ -9,7 +9,7 @@
 - Java EE / Jakarta EE 기준: Java EE 6 기반(JPA 2.0, Servlet 3.0), Java EE 7 일부 지원(WebSocket·JMS 2.0 등)
 
 ## 시대적 배경
-2014년 3월 Java 8이 출시되며 **람다 표현식·메서드 참조·`java.time`(JSR-310)·`Optional`**이라는 대형 언어 변화가 왔다. Spring 4.0은 이 변화에 맞춰 코드베이스를 정비하고 Java 8을 1급으로 지원했다. 동시에 낡은 의존성(Java 5, Servlet 2.4 등)에 대한 지원을 정리했다.
+2014년 3월 출시를 앞둔 Java 8은 **람다 표현식·메서드 참조·`java.time`(JSR-310)·`Optional`**이라는 대형 언어 변화를 예고하고 있었다. Spring 4.0(2013-12)은 출시 전 Java 8 빌드를 기준으로 이 변화에 맞춰 코드베이스를 미리 정비해 Java 8을 1급으로 지원했고, Java 8 GA 직후의 4.0.3(2014-03)에서 그 지원이 production-ready가 됐다. 동시에 낡은 의존성(Java 5, Servlet 2.4 등)에 대한 지원을 정리했다.
 
 더 큰 사건은 **2014년 Spring Boot 1.0**의 등장이다. Boot는 4.x의 조건부 빈(`@Conditional`)·Java Config·`@Enable*` 기능 위에서 "자동 구성(auto-configuration)"과 "내장 톰캣"을 제공해, Spring 설정의 복잡함을 사실상 제거했다. 4.x는 Boot라는 거대한 생태계를 떠받치는 토대 세대다.
 

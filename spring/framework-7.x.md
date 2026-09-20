@@ -133,7 +133,7 @@ RestClient client = RestClient.builder()
     .apiVersionInserter(ApiVersionInserter.useHeader("API-Version"))
     .build();
 
-Account account = client.get().uri("/accounts/1")
+Account account = client.get().uri("/account/1")
     .apiVersion(1.1)
     .retrieve()
     .body(Account.class);
@@ -151,7 +151,7 @@ Account account = client.get().uri("/accounts/1")
 - **`javax.annotation`·`javax.inject` 애노테이션 지원 완전 제거** → `jakarta.annotation.*`·`jakarta.inject.*`로 전환 필수(6.x가 남겨둔 잔여 `javax.*`를 마저 정리).
 
 ## 마이그레이션 관점 (6.x → 7.0)
-- **Jakarta EE 9/10 → 11**: Servlet 6.1·JPA 3.2·Bean Validation 3.1로 상향, Tomcat 11+·Hibernate ORM 7+·Validator 9+ 등 런타임 의존성 대거 상향.
+- **Jakarta EE 9/10 → 11**: Servlet 6.1·JPA 3.2·Bean Validation 3.1로 상향, Tomcat 11+·Hibernate ORM 7.1+·Validator 9+ 등 런타임 의존성 대거 상향.
 - **널 안정성 애노테이션 교체**: `org.springframework.lang.*` → `org.jspecify.annotations.*`.
 - **Jackson 3 전환**: `tools.jackson` 패키지 변경 대응.
 - **잔여 `javax.*` 제거**: `javax.annotation`/`javax.inject` → `jakarta.*`.

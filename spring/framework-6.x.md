@@ -20,7 +20,7 @@
 ## 핵심 추가/변경 기능
 
 ### javax → jakarta 네임스페이스 대전환 (6.0의 핵심)
-Servlet, JPA, Bean Validation, JMS, Annotations 등 모든 표준 API import가 바뀐다. 이것이 5.x → 6.x 마이그레이션의 가장 큰 장벽이다.
+Servlet, JPA, Bean Validation, JMS, Annotations 등 표준 API import가 통째로 바뀐다(다만 `@PostConstruct`·`@Inject` 같은 `javax.annotation`·`javax.inject` 애노테이션은 기존 바이너리 호환을 위해 6.x가 `javax` 쪽도 계속 인식한다 — 완전 제거는 7.0). 이것이 5.x → 6.x 마이그레이션의 가장 큰 장벽이다.
 
 ```java
 // Spring 5.x (Java EE / javax)
@@ -140,7 +140,7 @@ Java 21의 가상 스레드(Project Loom)를 지원. 요청당 스레드(thread-
 
 ## 설정 스타일의 변화
 설정 모델 자체(Java Config + 어노테이션 + Boot 자동 구성 + 함수형 DSL)는 5.x에서 정립된 것을 계승한다. 6.x의 변화는 **"무엇을 import 하느냐"와 "어떻게 빌드/실행하느냐"**에 있다.
-- 패키지 네임스페이스가 `jakarta.*`로 전면 교체 — 코드 레벨의 가장 큰 차이.
+- 패키지 네임스페이스가 `jakarta.*`로 교체 — 코드 레벨의 가장 큰 차이(`javax.annotation`·`javax.inject` 애노테이션만 호환을 위해 6.x가 함께 인식한다).
 - **AOT를 전제로 한 설정** — 동적 리플렉션·런타임 빈 등록보다, 빌드 타임에 정적으로 분석 가능한 구성이 권장된다(네이티브 이미지 친화). Kotlin/Java의 함수형 빈 DSL이 이런 면에서 유리.
 
 ## 마이너 버전별 변화

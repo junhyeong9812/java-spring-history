@@ -131,6 +131,7 @@ interface Logger {
 ### HTTP/2 클라이언트 (인큐베이터, JEP 110)
 - `HttpURLConnection`의 낡은 한계를 대체하는 새 HTTP 클라이언트. HTTP/2와 WebSocket을 지원하며 동기/비동기 요청을 제공한다.
 - Java 9에서는 **인큐베이터 모듈**(모듈명 `jdk.incubator.httpclient`, 패키지 `jdk.incubator.http`)로 시범 도입되었고, 이후 Java 11(JEP 321)에서 `java.net.http`로 정식 표준화되었다.
+- 정식화 과정에서 패키지뿐 아니라 API 이름도 바뀌었다. 아래 인큐베이터 코드의 `HttpResponse.BodyHandler.asString()`은 Java 11에서 `HttpResponse.BodyHandlers.ofString()`에 해당한다.
 
 ```java
 // Java 9 인큐베이터 API (이후 java.net.http로 표준화됨)

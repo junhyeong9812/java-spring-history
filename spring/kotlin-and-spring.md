@@ -156,10 +156,11 @@ dependencies {
 }
 ```
 
-플러그인 역할:
+플러그인·의존성 역할:
 - **`kotlin-spring` (all-open 래퍼)**: 아래 "final class 문제" 참조.
 - **`kotlin-jpa` (no-arg 래퍼)**: `@Entity`/`@Embeddable`/`@MappedSuperclass`에 합성 기본 생성자를 생성해 JPA의 "인자 없는 생성자" 요구를 충족.
 - **`jackson-module-kotlin`**: data class를 기본 생성자 없이도 JSON 역직렬화.
+- **`kotlin-reflect`**: Spring의 코틀린 지원이 클래스패스에 요구하는 의존성. 코틀린 주 생성자·파라미터 같은 메타데이터를 런타임 리플렉션으로 읽는 데 쓰인다.
 
 ### 코틀린에서 Spring 어노테이션 사용 시 주의점 — final class 문제와 all-open
 코틀린은 **클래스와 멤버가 기본적으로 `final`**이다. 그런데 Spring은 `@Configuration`, `@Transactional`, AOP 등에서 **CGLIB 프록시(서브클래싱)**를 만들기 때문에, final 클래스는 프록시를 만들 수 없어 문제가 된다.

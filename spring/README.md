@@ -56,7 +56,7 @@ flowchart TD
 | 2009~12 | **3.0**(12월) / 3.1 / 3.2 | — | Java 5 baseline, **Java Config**, SpEL, REST, `@Profile` |
 | 2013~16 | **4.0**(13.12) / 4.3 | **1.0**(14.04) | Java 8 지원, `@RestController` / Boot 등장(자동 설정·스타터) |
 | 2017~20 | **5.0**(17.09) / 5.2 / 5.3 | **2.0**(18.03) | **리액티브(WebFlux) + Kotlin 1급 지원** / Boot 2.0 Kotlin 정식 지원, 5.2 코루틴 |
-| 2022~ | **6.0**(22.11) / 6.1 / 6.2 | **3.0**(22.11) / 3.1~3.4 | **Java 17 + Jakarta EE 9(javax→jakarta)**, GraalVM 네이티브/AOT, 가상 스레드 |
+| 2022~ | **6.0**(22.11) / 6.1 / 6.2 | **3.0**(22.11) / 3.1~3.5 | **Java 17 + Jakarta EE 9(javax→jakarta)**, GraalVM 네이티브/AOT, 가상 스레드 |
 | 2025~ | **7.0**(25.11.13 GA) | **4.0**(25.11.20 GA) | **현재 최신 세대** — Java 17 baseline(Java 25 수용), Jakarta EE 11, JSpecify 널 안정성, API 버저닝, Boot 코드베이스 모듈화 |
 
 아래 타임라인은 Framework 대버전·Boot 대버전과 자바 baseline의 대응 관계를 한눈에 보여준다.

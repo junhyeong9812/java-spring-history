@@ -8,7 +8,7 @@
   - 2.0 (2018-03) — Spring Framework 5, WebFlux, Micrometer, Kotlin 1급 지원, HikariCP 기본
   - 2.1 (2018-10)
   - 2.2 (2019-10) — Java 13 지원, RSocket, JUnit 5 기본
-  - 2.3 (2020-05) — 그레이들 기반 OCI 이미지 빌드(Buildpacks), Liveness/Readiness 프로브, Graceful shutdown
+  - 2.3 (2020-05) — 메이븐·그레이들 플러그인 기반 OCI 이미지 빌드(Buildpacks), Liveness/Readiness 프로브, Graceful shutdown
   - 2.4 (2020-11) — `application.yml` 설정 파일 처리 방식 개편(config data API), 도커 이미지/k8s 강화
   - 2.5 (2021-05) — SQL 초기화 개편, 환경변수 prefix
   - 2.6 (2021-11) — Actuator 보강, 순환 참조 기본 금지
@@ -112,7 +112,7 @@ Spring Framework 5의 Kotlin 지원을 Boot 차원에서 흡수했다. **start.s
 class DemoApplication
 
 fun main(args: Array<String>) {
-    runApplication<DemoApplication>(*args)   // Boot가 제공하는 Kotlin 확장 함수
+    runApplication<DemoApplication>(*args)   // Boot가 제공하는 Kotlin 최상위 함수(reified 제네릭)
 }
 
 @RestController

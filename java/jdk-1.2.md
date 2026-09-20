@@ -45,7 +45,7 @@ public class Demo {
 ```java
 import java.util.*;
 
-// 제네릭·diamond·for-each·오토박싱은 모두 J2SE 5.0부터다.
+// 제네릭·for-each·오토박싱은 모두 J2SE 5.0부터다(diamond `<>`는 Java SE 7).
 // 1.2 당시 문법은 raw type + 명시적 캐스트 + Iterator.
 List list = new ArrayList();
 list.add("a");

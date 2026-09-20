@@ -32,7 +32,7 @@ Java 21 이후 2년간(22·23·24) 프리뷰·인큐베이터·실험 단계를 
 ## 주요 추가 기능
 
 ### Scoped Values (JEP 506, 정식)
-- 스레드(특히 가상 스레드) 간 불변 데이터를 `ThreadLocal`보다 안전하고 효율적으로 공유한다. 22~24의 여러 프리뷰를 거쳐 LTS에서 정식화되었다. 값은 명시된 동적 범위(`run`/`call`) 안에서만 유효하며 불변이다.
+- 스레드(특히 가상 스레드) 간 불변 데이터를 `ThreadLocal`보다 안전하고 효율적으로 공유한다. 21~24의 여러 프리뷰를 거쳐 LTS에서 정식화되었다. 값은 명시된 동적 범위(`run`/`call`) 안에서만 유효하며 불변이다.
 
 ```java
 final static ScopedValue<User> CURRENT_USER = ScopedValue.newInstance();

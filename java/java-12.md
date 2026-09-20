@@ -41,7 +41,7 @@ int numLetters = switch (day) {
     case WEDNESDAY              -> 9;
 };
 ```
-> 참고: 이 시점에는 블록에서 값을 반환할 때 `break <값>;` 문법을 썼다. 이후 Java 13의 2차 preview에서 `yield`로 대체된다.
+> 참고: 이 시점에는 블록에서 값을 반환할 때 `break <값>;` 문법을 썼다. 이후 Java 13의 2차 preview에서 `yield`로 대체되고, Java 14(JEP 361)에서 정식화된다.
 
 ### Shenandoah GC (JEP 189)
 - 상태: **실험적(Experimental)** — Red Hat이 주도한 저지연 GC.

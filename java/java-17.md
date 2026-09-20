@@ -34,7 +34,7 @@ public record Rectangle(double w, double h)      implements Shape { }
 - `sealed` — 다시 제한된 확장 허용
 - `non-sealed` — 봉인을 풀어 자유 확장 허용
 
-아래 클래스 다이어그램은 봉인 계층을 표현한다. `Shape`는 `permits`로 허용한 하위 타입(`Circle`·`Square`·`Triangle`)만 구현할 수 있어, 타입 집합이 닫혀 있음을 컴파일러가 보장한다.
+아래 클래스 다이어그램은 봉인 계층을 표현한다. `Shape`는 `permits`로 허용한 하위 타입(`Circle`·`Rectangle`)만 구현할 수 있어, 타입 집합이 닫혀 있음을 컴파일러가 보장한다.
 
 ```mermaid
 classDiagram
@@ -44,16 +44,12 @@ classDiagram
     class Circle {
         +double radius
     }
-    class Square {
-        +double side
-    }
-    class Triangle {
-        +double base
-        +double height
+    class Rectangle {
+        +double w
+        +double h
     }
     Shape <|.. Circle : permits
-    Shape <|.. Square : permits
-    Shape <|.. Triangle : permits
+    Shape <|.. Rectangle : permits
 ```
 
 ### switch 패턴 매칭 (JEP 406, preview)
@@ -91,11 +87,9 @@ static String describe(Object obj) {
 flowchart TD
     A["입력 객체 (Shape)"] --> B{"타입 패턴 매칭"}
     B -->|"case Circle c"| C["원 넓이: PI * r^2"]
-    B -->|"case Square s"| D["정사각형 넓이: side^2"]
-    B -->|"case Triangle t"| E["삼각형 넓이: base * height / 2"]
+    B -->|"case Rectangle r"| D["직사각형 넓이: w * h"]
     C --> F["결과 반환"]
     D --> F
-    E --> F
 ```
 
 ### 새 의사난수 생성기 API (JEP 356, 정식)

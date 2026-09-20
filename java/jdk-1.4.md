@@ -7,7 +7,7 @@
 - 개발 주체: Sun Microsystems
 - 공식 명칭: J2SE 1.4 (Java 2 Platform, Standard Edition v1.4)
 - 코드네임: Merlin (멀린, 쇠황조롱이)
-- 참고: JСР(Java Community Process)를 거쳐 개발된 최초의 자바 플랫폼 릴리스(JSR 59).
+- 참고: JCP(Java Community Process)를 거쳐 개발된 최초의 자바 플랫폼 릴리스(JSR 59).
 
 ## 시대적 배경
 J2SE 1.3이 성능·안정성을 다졌다면, 1.4는 다시 기능 확장으로 방향을 잡았다. 당시 자바 애플리케이션은 점점 대형화·서버화되었고, 고성능 I/O, 표준 로깅, XML 처리, 정규식 같은 기능을 그동안 서드파티 라이브러리(예: Apache Log4j, Jakarta ORO, JDOM)에 의존해 왔다. 1.4는 이런 사실상 표준(de facto standard)들을 플랫폼 자체에 흡수하여, 외부 의존 없이도 견고한 애플리케이션을 만들 수 있게 했다.
